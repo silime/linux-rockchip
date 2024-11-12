@@ -257,7 +257,6 @@ static int rad_panel_prepare(struct drm_panel *panel)
 	}
 
 	rad->prepared = true;
-	struct rad_panel *rad = to_rad_panel(panel);
 	struct mipi_dsi_device *dsi = rad->dsi;
 	struct device *dev = &dsi->dev;
 	int color_format = color_format_from_dsi_format(dsi->format);
