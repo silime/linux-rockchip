@@ -984,7 +984,7 @@
 	status = "okay";
 	clock-frequency = <400000>;
 	focaltech@38 {
-		status = "disabled";
+		status = "okay";
 		compatible = "focaltech,fts";
 		reg = <0x38>;
 
@@ -1025,7 +1025,7 @@
 };
 
 &i2c6 {
-	status = "disabled";
+	status = "okay";
 	clock-frequency = <400000>;
 	usbc0: fusb302@22 {
 		compatible = "fcs,fusb302";
