@@ -8,7 +8,7 @@ on:
 jobs:
   Build:
     name: Compile and upload kernel
-    runs-on: runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     # if: ${{ github.repository_owner == 'armbian' }}
     env:
       OCI_TARGET_BASE: "ghcr.io/${{ github.repository }}/" # This is picked up by the Docker launcher automatically
