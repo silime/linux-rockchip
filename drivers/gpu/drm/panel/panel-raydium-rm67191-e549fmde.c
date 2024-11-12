@@ -357,77 +357,77 @@ static int rad_panel_unprepare(struct drm_panel *panel)
 
 static int rad_panel_enable(struct drm_panel *panel)
 {
-	// struct rad_panel *rad = to_rad_panel(panel);
-	// struct mipi_dsi_device *dsi = rad->dsi;
-	// struct device *dev = &dsi->dev;
-	// int color_format = color_format_from_dsi_format(dsi->format);
-	// int ret;
+	struct rad_panel *rad = to_rad_panel(panel);
+	struct mipi_dsi_device *dsi = rad->dsi;
+	struct device *dev = &dsi->dev;
+	int color_format = color_format_from_dsi_format(dsi->format);
+	int ret;
 
-	// dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
 
-	// ret = rad_panel_push_cmd_list(dsi);
+	ret = rad_panel_push_cmd_list(dsi);
+	if (ret < 0) {
+		dev_err(dev, "Failed to send MCS (%d)\n", ret);
+		goto fail;
+	}
+
+	// /* Select User Command Set table (CMD1) */
+	// ret = mipi_dsi_generic_write(dsi, (u8[]){ WRMAUCCTR, 0x00 }, 2);
+	// if (ret < 0)
+	// 	goto fail;
+
+	// /* Software reset */
+	// ret = mipi_dsi_dcs_soft_reset(dsi);
 	// if (ret < 0) {
-	// 	dev_err(dev, "Failed to send MCS (%d)\n", ret);
+	// 	dev_err(dev, "Failed to do Software Reset (%d)\n", ret);
 	// 	goto fail;
 	// }
 
-	// // /* Select User Command Set table (CMD1) */
-	// // ret = mipi_dsi_generic_write(dsi, (u8[]){ WRMAUCCTR, 0x00 }, 2);
-	// // if (ret < 0)
-	// // 	goto fail;
+	// usleep_range(15000, 17000);
 
-	// // /* Software reset */
-	// // ret = mipi_dsi_dcs_soft_reset(dsi);
-	// // if (ret < 0) {
-	// // 	dev_err(dev, "Failed to do Software Reset (%d)\n", ret);
-	// // 	goto fail;
-	// // }
-
-	// // usleep_range(15000, 17000);
-
-	// // /* Set DSI mode */
-	// // ret = mipi_dsi_generic_write(dsi, (u8[]){ 0xC2, 0x0B }, 2);
-	// // if (ret < 0) {
-	// // 	dev_err(dev, "Failed to set DSI mode (%d)\n", ret);
-	// // 	goto fail;
-	// // }
-	// /* Set tear ON */
-	// // ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-	// // if (ret < 0) {
-	// // 	dev_err(dev, "Failed to set tear ON (%d)\n", ret);
-	// // 	goto fail;
-	// // }
-	// /* Set tear scanline */
-	// ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x380);
+	// /* Set DSI mode */
+	// ret = mipi_dsi_generic_write(dsi, (u8[]){ 0xC2, 0x0B }, 2);
 	// if (ret < 0) {
-	// 	dev_err(dev, "Failed to set tear scanline (%d)\n", ret);
+	// 	dev_err(dev, "Failed to set DSI mode (%d)\n", ret);
 	// 	goto fail;
 	// }
-	// /* Set pixel format */
-	// // ret = mipi_dsi_dcs_set_pixel_format(dsi, color_format);
-	// // dev_dbg(dev, "Interface color format set to 0x%x\n", color_format);
-	// // if (ret < 0) {
-	// // 	dev_err(dev, "Failed to set pixel format (%d)\n", ret);
-	// // 	goto fail;
-	// // }
-	// /* Exit sleep mode */
-	// ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+	/* Set tear ON */
+	// ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
 	// if (ret < 0) {
-	// 	dev_err(dev, "Failed to exit sleep mode (%d)\n", ret);
+	// 	dev_err(dev, "Failed to set tear ON (%d)\n", ret);
 	// 	goto fail;
 	// }
-
-	// usleep_range(5000, 7000);
-
-	// ret = mipi_dsi_dcs_set_display_on(dsi);
+	/* Set tear scanline */
+	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x380);
+	if (ret < 0) {
+		dev_err(dev, "Failed to set tear scanline (%d)\n", ret);
+		goto fail;
+	}
+	/* Set pixel format */
+	// ret = mipi_dsi_dcs_set_pixel_format(dsi, color_format);
+	// dev_dbg(dev, "Interface color format set to 0x%x\n", color_format);
 	// if (ret < 0) {
-	// 	dev_err(dev, "Failed to set display ON (%d)\n", ret);
+	// 	dev_err(dev, "Failed to set pixel format (%d)\n", ret);
 	// 	goto fail;
 	// }
+	/* Exit sleep mode */
+	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+	if (ret < 0) {
+		dev_err(dev, "Failed to exit sleep mode (%d)\n", ret);
+		goto fail;
+	}
 
-	// backlight_enable(rad->backlight);
-	// dev_info(dev, "Finshed panel init \n");
-	// return 0;
+	usleep_range(5000, 7000);
+
+	ret = mipi_dsi_dcs_set_display_on(dsi);
+	if (ret < 0) {
+		dev_err(dev, "Failed to set display ON (%d)\n", ret);
+		goto fail;
+	}
+
+	backlight_enable(rad->backlight);
+	dev_info(dev, "Finshed panel init \n");
+	return 0;
 
 fail:
 	gpiod_set_value_cansleep(rad->reset, 1);
