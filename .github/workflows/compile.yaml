@@ -24,7 +24,7 @@ jobs:
       - name: Checkout build repo
         uses: actions/checkout@v4
         with:
-          repository: armbian/build
+          repository: silime/armbian
           ref: main
           fetch-depth: 1
           clean: false
