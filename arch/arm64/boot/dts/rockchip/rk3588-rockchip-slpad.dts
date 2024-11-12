@@ -346,6 +346,8 @@
 		regulator-boot-on;
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
+		// enable-active-high;
+		// gpio = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;
 		vin-supply = <&vcc12v_dcin>;
 	};
 
@@ -649,7 +651,7 @@
 	//rockchip,lane-rate = <1000>;
 	dsi0_panel: panel@0 {
 		status = "okay";
-		compatible = "raydium,e549fmde";
+		compatible = "raydium,rm67191-e549fmde";
 		reg = <0>;
 		power-supply = <&vcc5v0_sys>;
 		cmd_later_reset = <0>;
