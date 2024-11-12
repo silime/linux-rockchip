@@ -245,13 +245,13 @@ static int rad_panel_prepare(struct drm_panel *panel)
 	struct rad_panel *rad = to_rad_panel(panel);
 	int ret;
 
-	ret = regulator_bulk_enable(rad->num_supplies, rad->supplies);
-	if (ret)
-		return ret;
+	// ret = regulator_bulk_enable(rad->num_supplies, rad->supplies);
+	// if (ret)
+	// 	return ret;
 
 	if (rad->reset) {
 		gpiod_set_value_cansleep(rad->reset, 1);
-		usleep_range(3000, 5000);
+		usleep_range(12000, 15000);
 		gpiod_set_value_cansleep(rad->reset, 0);
 		usleep_range(18000, 20000);
 	}
@@ -302,32 +302,32 @@ static int rad_panel_enable(struct drm_panel *panel)
 		goto fail;
 	}
 
-	/* Select User Command Set table (CMD1) */
-	ret = mipi_dsi_generic_write(dsi, (u8[]){ WRMAUCCTR, 0x00 }, 2);
-	if (ret < 0)
-		goto fail;
+	// /* Select User Command Set table (CMD1) */
+	// ret = mipi_dsi_generic_write(dsi, (u8[]){ WRMAUCCTR, 0x00 }, 2);
+	// if (ret < 0)
+	// 	goto fail;
 
-	/* Software reset */
-	ret = mipi_dsi_dcs_soft_reset(dsi);
-	if (ret < 0) {
-		dev_err(dev, "Failed to do Software Reset (%d)\n", ret);
-		goto fail;
-	}
+	// /* Software reset */
+	// ret = mipi_dsi_dcs_soft_reset(dsi);
+	// if (ret < 0) {
+	// 	dev_err(dev, "Failed to do Software Reset (%d)\n", ret);
+	// 	goto fail;
+	// }
 
-	usleep_range(15000, 17000);
+	// usleep_range(15000, 17000);
 
-	/* Set DSI mode */
-	ret = mipi_dsi_generic_write(dsi, (u8[]){ 0xC2, 0x0B }, 2);
-	if (ret < 0) {
-		dev_err(dev, "Failed to set DSI mode (%d)\n", ret);
-		goto fail;
-	}
+	// /* Set DSI mode */
+	// ret = mipi_dsi_generic_write(dsi, (u8[]){ 0xC2, 0x0B }, 2);
+	// if (ret < 0) {
+	// 	dev_err(dev, "Failed to set DSI mode (%d)\n", ret);
+	// 	goto fail;
+	// }
 	/* Set tear ON */
-	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-	if (ret < 0) {
-		dev_err(dev, "Failed to set tear ON (%d)\n", ret);
-		goto fail;
-	}
+	// ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+	// if (ret < 0) {
+	// 	dev_err(dev, "Failed to set tear ON (%d)\n", ret);
+	// 	goto fail;
+	// }
 	/* Set tear scanline */
 	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x380);
 	if (ret < 0) {
@@ -335,12 +335,12 @@ static int rad_panel_enable(struct drm_panel *panel)
 		goto fail;
 	}
 	/* Set pixel format */
-	ret = mipi_dsi_dcs_set_pixel_format(dsi, color_format);
-	dev_dbg(dev, "Interface color format set to 0x%x\n", color_format);
-	if (ret < 0) {
-		dev_err(dev, "Failed to set pixel format (%d)\n", ret);
-		goto fail;
-	}
+	// ret = mipi_dsi_dcs_set_pixel_format(dsi, color_format);
+	// dev_dbg(dev, "Interface color format set to 0x%x\n", color_format);
+	// if (ret < 0) {
+	// 	dev_err(dev, "Failed to set pixel format (%d)\n", ret);
+	// 	goto fail;
+	// }
 	/* Exit sleep mode */
 	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
 	if (ret < 0) {
