@@ -675,6 +675,7 @@
 			MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
 		dsi,format = <MIPI_DSI_FMT_RGB888>;
 		dsi,lanes  = <4>;
+		video-mode = <1>;
 		panel-init-sequence = [
 			15 00 02 FE 0E
 			15 00 02 4B 00
