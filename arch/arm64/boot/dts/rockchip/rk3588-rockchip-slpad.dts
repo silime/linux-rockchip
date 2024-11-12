@@ -654,8 +654,8 @@
 		power-supply = <&vcc5v0_sys>;
 		cmd_later_reset = <0>;
 		//backlight = <&backlight>;
-		v3p3-supply = <&vcc_3v3_s3>;
-		v1p8-supply = <&vcc_1v8_s0>;
+		// v3p3-supply = <&vcc_3v3_s3>;
+		// v1p8-supply = <&vcc_1v8_s0>;
 		dsi-lanes = <4>;
 		reset-gpios = <&gpio1 RK_PC6 GPIO_ACTIVE_LOW>;
 
