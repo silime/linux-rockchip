@@ -257,7 +257,7 @@ static int rad_panel_prepare(struct drm_panel *panel)
 	}
 
 	rad->prepared = true;
-
+	rad_panel_enable(panel);
 	return 0;
 }
 
@@ -357,12 +357,12 @@ static int rad_panel_enable(struct drm_panel *panel)
 	}
 
 	backlight_enable(rad->backlight);
-
+	dev_info(dev, "Finshed panel init \n");
 	return 0;
 
 fail:
 	gpiod_set_value_cansleep(rad->reset, 1);
-
+	dev_info(dev, "ERROR panel init \n");
 	return ret;
 }
 
