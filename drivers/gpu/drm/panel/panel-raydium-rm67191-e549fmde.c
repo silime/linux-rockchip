@@ -561,9 +561,9 @@ static int rad_panel_probe(struct mipi_dsi_device *dsi)
 		return ret;
 	}
 
-	ret = rad_init_regulators(panel);
-	if (ret)
-		return ret;
+	// ret = rad_init_regulators(panel);
+	// if (ret)
+	// 	return ret;
 
 	drm_panel_init(&panel->panel, dev, &rad_panel_funcs,
 		       DRM_MODE_CONNECTOR_DSI);
