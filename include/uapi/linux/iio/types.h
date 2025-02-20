@@ -56,6 +56,8 @@ enum iio_chan_type {
 	IIO_TAP_TAP,
 	IIO_WRIST_TILT_GESTURE,
 	IIO_GESTURE,
+	IIO_WKUP,
+	IIO_FREE_FALL,
 #endif
 };
 
