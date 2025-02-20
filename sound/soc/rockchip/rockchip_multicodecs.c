@@ -41,6 +41,7 @@
 #define DRV_NAME "rk-multicodecs"
 #define WAIT_CARDS	(SNDRV_CARDS - 1)
 #define DEFAULT_MCLK_FS	256
+#define DEFAULT_AW8733_MODE 1
 
 struct adc_keys_button {
 	u32 voltage;
@@ -66,6 +67,7 @@ struct multicodecs_data {
 	struct extcon_dev *extcon;
 	struct delayed_work handler;
 	unsigned int mclk_fs;
+	unsigned int aw8733_mode;
 	bool codec_hp_det;
 	u32 num_keys;
 	u32 last_key;
@@ -293,8 +295,16 @@ static int mc_spk_event(struct snd_soc_dapm_widget *w,
 	struct snd_soc_card *card = w->dapm->card;
 	struct multicodecs_data *mc_data = snd_soc_card_get_drvdata(card);
 
+	int i;
+
 	switch (event) {
 	case SND_SOC_DAPM_POST_PMU:
+		for(i=1; i<mc_data->aw8733_mode; i++) {
+			gpiod_set_value_cansleep(mc_data->spk_ctl_gpio, 1);
+			udelay(2);
+			gpiod_set_value_cansleep(mc_data->spk_ctl_gpio, 0);
+			udelay(2);
+		}
 		gpiod_set_value_cansleep(mc_data->spk_ctl_gpio, 1);
 		break;
 	case SND_SOC_DAPM_PRE_PMD:
@@ -586,7 +596,7 @@ static int rk_multicodecs_probe(struct platform_device *pdev)
 	struct of_phandle_args args;
 	struct device_node *node;
 	struct input_dev *input;
-	u32 val;
+	u32 val, mode;
 	int count, value, irq;
 	int ret = 0, i = 0, idx = 0;
 	const char *prefix = "rockchip,";
@@ -681,6 +691,10 @@ static int rk_multicodecs_probe(struct platform_device *pdev)
 
 	/* Only reference the codecs[0].of_node which maybe as master. */
 	rk_multicodecs_parse_daifmt(np, codecs[0].of_node, mc_data, prefix);
+
+	mc_data->aw8733_mode = DEFAULT_AW8733_MODE;
+	if (!of_property_read_u32(np, "rockchip,aw8733-mode", &mode))
+		mc_data->aw8733_mode = mode;
 
 	link->cpus->of_node = of_parse_phandle(np, "rockchip,cpu", 0);
 	if (!link->cpus->of_node)
