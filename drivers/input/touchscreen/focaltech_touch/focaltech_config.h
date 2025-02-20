@@ -111,7 +111,7 @@
 /*
  * choose your ic chip type of focaltech
  */
-#define FTS_CHIP_TYPE   _FT8201
+#define FTS_CHIP_TYPE   _FT3517U
 
 /******************* Enables *********************/
 /*********** 1 to enable, 0 to disable ***********/
@@ -132,7 +132,7 @@
  * Report Pressure in multitouch
  * 1:enable(default),0:disable
 */
-#define FTS_REPORT_PRESSURE_EN                  1
+#define FTS_REPORT_PRESSURE_EN                  0
 
 /*
  * Gesture function enable
@@ -156,7 +156,7 @@
  * Glove mode enable
  * 1: enable, 0:disable(default)
  */
-#define FTS_GLOVE_EN                            0
+#define FTS_GLOVE_EN                            1
 /*
  * cover enable
  * 1: enable, 0:disable(default)
@@ -185,7 +185,7 @@
  * enable it when customer need control TP power
  * default: disable
  */
-#define FTS_POWER_SOURCE_CUST_EN                1
+#define FTS_POWER_SOURCE_CUST_EN                0
 
 /****************************************************/
 
@@ -198,7 +198,7 @@
 /*
  * auto upgrade for lcd cfg
  */
-#define FTS_AUTO_LIC_UPGRADE_EN                 1
+#define FTS_AUTO_LIC_UPGRADE_EN                 0
 
 /*
  * Check vendor_id number

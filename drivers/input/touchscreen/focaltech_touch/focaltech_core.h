@@ -88,8 +88,8 @@
 #define FTS_COORDS_ARR_SIZE                 4
 #define FTS_X_MIN_DISPLAY_DEFAULT           0
 #define FTS_Y_MIN_DISPLAY_DEFAULT           0
-#define FTS_X_MAX_DISPLAY_DEFAULT           1600
-#define FTS_Y_MAX_DISPLAY_DEFAULT           2176
+#define FTS_X_MAX_DISPLAY_DEFAULT           799
+#define FTS_Y_MAX_DISPLAY_DEFAULT           1279
 
 #define FTS_TOUCH_DOWN                      0
 #define FTS_TOUCH_UP                        1
@@ -122,6 +122,10 @@ struct fts_ts_platform_data {
     u32 x_min;
     u32 y_min;
     u32 max_touch_number;
+
+    bool invert_x;
+    bool invert_y;
+    bool swap;
 };
 
 struct ts_event {

@@ -53,7 +53,6 @@
 #define FTS_I2C_VTG_MAX_UV                  1800000
 #endif
 
-//#define CFG_SWAP_XY
 /*****************************************************************************
 * Global variable or extern global variabls/functions
 *****************************************************************************/
@@ -245,11 +244,30 @@ static int fts_get_ic_information(struct fts_ts_data *ts_data)
 *  Return:
 *****************************************************************************/
 void fts_tp_state_recovery(struct i2c_client *client)
-{
+{   
+    u8 mode = 0;
+    int ret = 0;
     FTS_FUNC_ENTER();
     /* wait tp stable */
     fts_wait_tp_to_valid(client);
     /* recover TP charger state 0x8B */
+    /* Disable TP enter monitor mode */
+    ret = fts_i2c_read_reg(client, FTS_REG_RUN_MODE_EN, &mode);
+    if (ret < 0) {
+        FTS_ERROR("Unable to Read FTS mode: %d\n", ret);
+    }
+    FTS_DEBUG("FTS read mode: 0x%x",mode);
+    if (mode > 0){
+        ret = fts_i2c_write_reg(client, FTS_REG_RUN_MODE_EN, 0);
+        if (ret < 0) {
+            FTS_ERROR("Unable to Update FTS mode: %d\n", ret);
+        }
+        ret = fts_i2c_read_reg(client, FTS_REG_RUN_MODE_EN, &mode);
+        if (ret < 0) {
+            FTS_ERROR("Unable to Read FTS mode: %d\n", ret);
+        }
+        FTS_DEBUG("Update mode: 0x%x",mode);
+    }
     /* recover TP glove state 0xC0 */
     /* recover TP cover state 0xC1 */
     fts_ex_mode_recovery(client);
@@ -648,20 +666,12 @@ static int fts_input_report_b(struct fts_ts_data *data)
             if (events[i].area <= 0) {
                 events[i].area = 0x09;
             }
-#ifdef CFG_SWAP_XY
-        swap(events[i].x,events[i].y);
-#endif /* CFG_CTS_SWAP_XY */
-
 		
             input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, events[i].area);
-#if 0
-            input_report_abs(data->input_dev, ABS_MT_POSITION_X, 2176 - events[i].x);
-            input_report_abs(data->input_dev, ABS_MT_POSITION_Y, events[i].y);
-#else
+
             input_report_abs(data->input_dev, ABS_MT_POSITION_X, events[i].x);
             input_report_abs(data->input_dev, ABS_MT_POSITION_Y, events[i].y);
-#endif
-			//printk("bb...x = %d, y - %d\n...", events[i].x, 2176 - events[i].y, events[i].p);
+
             touchs |= BIT(events[i].id);
             data->touchs |= BIT(events[i].id);
 
@@ -731,8 +741,8 @@ static int fts_input_report_a(struct fts_ts_data *data)
             input_report_abs(data->input_dev, ABS_MT_TOUCH_MAJOR, events[i].area);
 
             input_report_abs(data->input_dev, ABS_MT_POSITION_X, events[i].x);
-            input_report_abs(data->input_dev, ABS_MT_POSITION_Y, 2176 - events[i].y);
-			//printk("aa...x = %d, y - %d...p = %d\n...", events[i].x, 2176 - events[i].y, events[i].p);
+            input_report_abs(data->input_dev, ABS_MT_POSITION_Y, events[i].y);
+
             input_mt_sync(data->input_dev);
 
             FTS_DEBUG("[A]P%d(%d, %d)[p:%d,tm:%d] DOWN!", events[i].id, events[i].x,
@@ -843,6 +853,10 @@ static int fts_read_touchdata(struct fts_ts_data *data)
         events[i].id = buf[FTS_TOUCH_ID_POS + base] >> 4;
         events[i].area = buf[FTS_TOUCH_AREA_POS + base] >> 4;
         events[i].p =  buf[FTS_TOUCH_PRE_POS + base];
+
+		if (data->pdata->swap) swap(events[i].x, events[i].y);
+		if (data->pdata->invert_x) events[i].x = data->pdata->x_max - events[i].x;
+		if (data->pdata->invert_y) events[i].y = data->pdata->y_max - events[i].y;
 
         if (EVENT_DOWN(events[i].flag) && (data->point_num == 0)) {
             FTS_INFO("abnormal touch data from fw");
@@ -988,17 +1002,11 @@ static int fts_input_init(struct fts_ts_data *ts_data)
     input_set_abs_params(input_dev, ABS_MT_TRACKING_ID, 0, 0x0f, 0, 0);
 #endif
 
-#ifdef CFG_SWAP_XY
-    input_set_abs_params(input_dev, ABS_MT_POSITION_X,
-            0, pdata->y_max, 0, 0);
-    input_set_abs_params(input_dev, ABS_MT_POSITION_Y,
-            0, pdata->x_max, 0, 0);
-#else /* CFG_CTS_SWAP_XY */
     input_set_abs_params(input_dev, ABS_MT_POSITION_X,
             0, pdata->x_max, 0, 0);
     input_set_abs_params(input_dev, ABS_MT_POSITION_Y,
             0, pdata->y_max, 0, 0);
-#endif /* CFG_CTS_SWAP_XY */
+
     input_set_abs_params(input_dev, ABS_MT_TOUCH_MAJOR, 0, 0xFF, 0, 0);
 #if FTS_REPORT_PRESSURE_EN
     input_set_abs_params(input_dev, ABS_MT_PRESSURE, 0, 0xFF, 0, 0);
@@ -1114,20 +1122,13 @@ err_irq_gpio_req:
 static int fts_get_dt_coords(struct device *dev, char *name,
                              struct fts_ts_platform_data *pdata)
 {
-    //int ret = 0;
-    //u32 coords[FTS_COORDS_ARR_SIZE] = { 0 };
-    //struct property *prop;
-    //struct device_node *np = dev->of_node;
-    //int coords_size;
+    int ret = 0;
+    u32 coords[FTS_COORDS_ARR_SIZE] = { 0 };
+    struct property *prop;
+    struct device_node *np = dev->of_node;
+    int coords_size;
 
-	pdata->x_min = FTS_X_MIN_DISPLAY_DEFAULT;
-	pdata->y_min = FTS_Y_MIN_DISPLAY_DEFAULT;
-	pdata->x_max = FTS_X_MAX_DISPLAY_DEFAULT;
-	pdata->y_max = FTS_Y_MAX_DISPLAY_DEFAULT;
-	
-	
-	
-    /*prop = of_find_property(np, name, NULL);
+    prop = of_find_property(np, name, NULL);
     if (!prop)
         return -EINVAL;
     if (!prop->value)
@@ -1156,12 +1157,11 @@ static int fts_get_dt_coords(struct device *dev, char *name,
         pdata->y_min = FTS_Y_MIN_DISPLAY_DEFAULT;
         pdata->x_max = FTS_X_MAX_DISPLAY_DEFAULT;
         pdata->y_max = FTS_Y_MAX_DISPLAY_DEFAULT;
-       // return -EINVAL;
+        return -EINVAL;
     }
-*/
-    printk("display x(%d %d) y(%d %d)", pdata->x_min, pdata->x_max, pdata->y_min, pdata->y_max);
-    /*FTS_INFO("display x(%d %d) y(%d %d)", pdata->x_min, pdata->x_max,
-             pdata->y_min, pdata->y_max);*/
+
+    FTS_INFO("display x(%d %d) y(%d %d)", pdata->x_min, pdata->x_max,
+             pdata->y_min, pdata->y_max);
     return 0;
 }
 
@@ -1235,6 +1235,10 @@ static int fts_parse_dt(struct device *dev, struct fts_ts_platform_data *pdata)
 
     FTS_INFO("max touch number:%d, irq gpio:%d, reset gpio:%d",
              pdata->max_touch_number, pdata->irq_gpio, pdata->reset_gpio);
+
+    pdata->invert_x = of_property_read_bool(np, "focaltech,touchscreen-inverted-x");
+    pdata->invert_y = of_property_read_bool(np, "focaltech,touchscreen-inverted-y");
+    pdata->swap = of_property_read_bool(np, "focaltech,swap-xy");
 
     FTS_FUNC_EXIT();
     return 0;
@@ -1329,6 +1333,7 @@ extern int fts_test_init(struct i2c_client *client);
 static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
     int ret = 0;
+    u8 mode = 0;
     struct fts_ts_platform_data *pdata;
     struct fts_ts_data *ts_data;
 
@@ -1380,12 +1385,12 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
         FTS_ERROR("fts input initialize fail");
         goto err_input_init;
     }
-
-    ret = fts_gpio_configure(ts_data);
+        ret = fts_gpio_configure(ts_data);
     if (ret) {
         FTS_ERROR("[GPIO]Failed to configure the gpios");
         goto err_gpio_config;
     }
+    
 
 #if FTS_POWER_SOURCE_CUST_EN
     ret = fts_power_source_init(ts_data);
@@ -1494,7 +1499,23 @@ static int fts_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
     ts_data->early_suspend.resume = fts_ts_late_resume;
     register_early_suspend(&ts_data->early_suspend);
 #endif
-
+    
+    ret = fts_i2c_read_reg(client, FTS_REG_RUN_MODE_EN, &mode);
+    if (ret < 0) {
+        FTS_ERROR("Unable to Read FTS mode: %d\n", ret);
+    }
+    FTS_DEBUG("FTS read mode: 0x%x",mode);
+    if (mode > 0){
+        ret = fts_i2c_write_reg(client, FTS_REG_RUN_MODE_EN, 0);
+        if (ret < 0) {
+            FTS_ERROR("Unable to Update FTS mode: %d\n", ret);
+        }
+        ret = fts_i2c_read_reg(client, FTS_REG_RUN_MODE_EN, &mode);
+        if (ret < 0) {
+            FTS_ERROR("Unable to Read FTS mode: %d\n", ret);
+        }
+        FTS_DEBUG("Update mode: 0x%x",mode);
+    }
     FTS_FUNC_EXIT();
     return 0;
 
@@ -1520,7 +1541,7 @@ err_input_init:
     if (ts_data->ts_workqueue)
         destroy_workqueue(ts_data->ts_workqueue);
     devm_kfree(&client->dev, ts_data);
-
+    
     FTS_FUNC_EXIT();
     return ret;
 }
@@ -1705,6 +1726,7 @@ static int fts_ts_resume(struct device *dev)
 
     ts_data->suspended = false;
     fts_irq_enable();
+    
 
     FTS_FUNC_EXIT();
     return 0;

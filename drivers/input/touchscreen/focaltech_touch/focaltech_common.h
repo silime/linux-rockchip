@@ -54,7 +54,7 @@
 #define FTS_CHIP_IDC            ((FTS_CHIP_TYPE & FLAGBIT(FLAG_IDC_BIT)) == FLAGBIT(FLAG_IDC_BIT))
 #define FTS_HID_SUPPORTTED      ((FTS_CHIP_TYPE & FLAGBIT(FLAG_HID_BIT)) == FLAGBIT(FLAG_HID_BIT))
 
-#define FTS_CHIP_TYPE_MAPPING {{0x10,0x82, 0x01, 0x80, 0x06, 0x80, 0xC6, 0x80, 0xB6}}
+#define FTS_CHIP_TYPE_MAPPING {{0x01,0x58, 0x22, 0x58, 0x22, 0x00, 0x00, 0x58, 0x2C}}
 
 #define I2C_BUFFER_LENGTH_MAXINUM           256
 #define FILE_NAME_LENGTH                    128
@@ -90,6 +90,7 @@
 #define FTS_REG_COVER_MODE_EN               0xC1
 #define FTS_REG_CHARGER_MODE_EN             0x8B
 #define FTS_REG_GESTURE_EN                  0xD0
+#define FTS_REG_RUN_MODE_EN                 0x86
 #define FTS_REG_GESTURE_OUTPUT_ADDRESS      0xD3
 #define FTS_REG_MODULE_ID                   0xE3
 #define FTS_REG_LIC_VER                     0xE4
