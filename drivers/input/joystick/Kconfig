@@ -175,6 +175,16 @@ config JOYSTICK_SPACEORB
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called spaceorb.
+	  
+config JOYSTICK_SARADCJOY
+	tristate "SARADC dual-joystick gamepad driver"
+	help
+	  The RK3588 SARADC joypad driver.
+
+config JOYSTICK_ROCKNIX
+	tristate "SARADC ROCKNIX-joystick gamepad driver"
+	help
+	  The RK3588 SARADC joypad driver.
 
 config JOYSTICK_SPACEBALL
 	tristate "SpaceTec SpaceBall 6dof controllers"
