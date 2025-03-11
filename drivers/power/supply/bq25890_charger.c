@@ -117,6 +117,8 @@ struct bq25890_device {
 	struct delayed_work pump_express_work;
 	unsigned long usb_event;
 
+	struct gpio_desc *otg_mode_en_io;
+	struct regulator_dev *otg_vbus_reg;
 	struct regmap *rmap;
 	struct regmap_field *rmap_fields[F_MAX_FIELDS];
 
@@ -937,7 +939,8 @@ static int bq25890_power_supply_init(struct bq25890_device *bq)
 static int bq25890_set_otg_cfg(struct bq25890_device *bq, u8 val)
 {
 	int ret;
-
+	if (!IS_ERR_OR_NULL(bq->otg_mode_en_io))
+		gpiod_direction_output(bq->otg_mode_en_io, val);
 	ret = bq25890_field_write(bq, F_OTG_CFG, val);
 	if (ret < 0)
 		dev_err(bq->dev, "Error switching to boost/charger mode: %d\n", ret);
@@ -1046,8 +1049,11 @@ static int bq25890_vbus_disable(struct regulator_dev *rdev)
 static int bq25890_vbus_is_enabled(struct regulator_dev *rdev)
 {
 	struct bq25890_device *bq = rdev_get_drvdata(rdev);
+	int gpio_status = 1;
 
-	return bq25890_field_read(bq, F_OTG_CFG);
+	if (!IS_ERR_OR_NULL(bq->otg_mode_en_io))
+		gpio_status = gpiod_get_value(bq->otg_mode_en_io);
+	return bq25890_field_read(bq, F_OTG_CFG) && gpio_status ? 1 : 0;
 }
 
 static const struct regulator_ops bq25890_vbus_ops = {
@@ -1060,6 +1066,7 @@ static const struct regulator_desc bq25890_vbus_desc = {
 	.name = "usb_otg_vbus",
 	.of_match = "usb-otg-vbus",
 	.type = REGULATOR_VOLTAGE,
+	.regulators_node = of_match_ptr("regulators"),
 	.owner = THIS_MODULE,
 	.ops = &bq25890_vbus_ops,
 	.fixed_uV = 5000000,
@@ -1237,7 +1244,11 @@ static int bq25890_fw_probe(struct bq25890_device *bq)
 	init->boostf = device_property_read_bool(bq->dev, "ti,boost-low-freq");
 	bq->notify_node = of_parse_phandle(bq->dev->of_node,
 					   "ti,usb-charger-detection", 0);
-
+	bq->otg_mode_en_io =  devm_gpiod_get_optional(bq->dev,
+						      "otg-mode-en",
+						      GPIOD_IN);
+	if (!IS_ERR_OR_NULL(bq->otg_mode_en_io))
+		gpiod_direction_output(bq->otg_mode_en_io, 0);
 	return 0;
 }
 
@@ -1299,6 +1310,7 @@ static int bq25890_pd_notifier_call(struct notifier_block *nb,
 	if (prop.intval == 0) {
 		bq->pd_cur = 450000;
 		bq->pd_vol = 5000000;
+		bq25890_field_write(bq, F_AUTO_DPDM_EN, 1);
 		queue_delayed_work(bq->charger_wq, &bq->pd_work,
 				   msecs_to_jiffies(10));
 		return NOTIFY_OK;
@@ -1314,7 +1326,7 @@ static int bq25890_pd_notifier_call(struct notifier_block *nb,
 		if (ret != 0)
 			return NOTIFY_OK;
 		bq->pd_vol = prop.intval;
-
+		bq25890_field_write(bq, F_AUTO_DPDM_EN, 0);
 		queue_delayed_work(bq->charger_wq, &bq->pd_work,
 				   msecs_to_jiffies(100));
 	}
