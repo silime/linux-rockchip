@@ -57,6 +57,29 @@
 		};
 	};
 	
+	charge-animation {
+		compatible = "rockchip,uboot-charge";
+		rockchip,uboot-charge-on = <1>;
+		rockchip,android-charge-on = <0>;
+		rockchip,uboot-low-power-voltage = <3300>;
+		rockchip,screen-on-voltage = <3400>;
+		rockchip,uboot-exit-charge-level = <2>;
+		rockchip,uboot-exit-charge-auto = <1>;
+		rockchip,system-suspend = <1>;
+		regulator-on-in-mem = <&vdd_log_s0>, <&vcc_2v0_pldo_s3>,
+			<&vdd2_ddr_s3>, <&vcc_1v8_s3>, <&avcc_1v8_s0>,
+			<&vdd_0v75_s3>, <&pldo6_s3>, <&vcc_3v3_s3>;
+
+		regulator-off-in-mem = <&vdd_gpu_s0>, <&vdd_npu_s0>,
+			<&vdd_vdenc_s0>, <&vdd_gpu_mem_s0>, <&vdd_npu_mem_s0>,
+			<&vdd_vdenc_mem_s0>, <&vcc_1v8_s0>, <&vcc_3v3_s0>,
+			<&vccio_sd_s0>, <&avdd_0v75_s0>, <&vdd_0v85_s0>,
+			<&vdd_cpu_big1_s0>, <&vdd_cpu_big0_s0>, <&vdd_cpu_lit_s0>,
+			<&vdd_cpu_big1_mem_s0>, <&vdd_cpu_big0_mem_s0>, <&vdd_cpu_lit_mem_s0>,
+			<&vddq_ddr_s0>, <&vdd_ddr_s0>, <&vdd_ddr_pll_s0>,
+			<&avdd_1v2_s0>, <&vdd_0v75_s0>;
+		status = "okay";
+	};
 	
 	joypad: slpad-joypad {
 		compatible = "rocknix-joypad";
@@ -209,6 +232,13 @@
 		compatible = "pwm-fan";
 		#cooling-cells = <2>;
 		cooling-levels = <15 55 72 94 117 139 162 184 207 229 255>;
+		rockchip,temp-trips = <
+		30000	1
+		45000	2
+		50000	3
+		65000	4
+		70000	5
+		>;
 		pwms = <&pwm14 0 10000 0>;
 	};
 	
@@ -229,7 +259,7 @@
 	};
 	
 	dp0_sound: dp0-sound {
-		status = "disabled";
+		status = "okay";
 		compatible = "rockchip,hdmi";
 		rockchip,card-name= "rockchip-dp0";
 		rockchip,mclk-fs = <512>;
@@ -285,6 +315,7 @@
 		clock-names = "ext_clock";
 		pinctrl-names = "default";
 		pinctrl-0 = <&wifi_enable_h>;
+		post-power-on-delay-ms = <200>;
 		reset-gpios = <&gpio0 RK_PC4 GPIO_ACTIVE_LOW>;
 	};
 	
@@ -329,7 +360,20 @@
 		enable-active-high;
 		vin-supply = <&vcc5v0_usb>;
 	};
-	
+
+	// vbus5v0_typec: vcc5v0-typec-regulator {
+	// 	compatible = "regulator-fixed";
+	// 	regulator-name = "vcc5v0_typec";
+	// 	regulator-boot-on;
+	// 	regulator-always-on;
+	// 	regulator-min-microvolt = <5000000>;
+	// 	regulator-max-microvolt = <5000000>;
+	// 	enable-active-high;
+	// 	gpio = <&gpio4 RK_PB1 GPIO_ACTIVE_HIGH>;
+	// 	pinctrl-names = "default";
+	// 	pinctrl-0 = <&vcc5v0_otg_en>;
+	// 	vin-supply = <&vcc5v0_sys>;
+	// };
 	wireless_wlan: wireless-wlan {
 		compatible = "wlan-platdata";
 		wifi_chip_type = "ap6398sv";
@@ -373,11 +417,11 @@
 };
 
 &hdmi0 {
-	status = "disabled";
+	status = "okay";
 };
 
 &hdmi0_in_vp0 {
-	status = "disabled";
+	status = "okay";
 };
 
 &hdmi0_sound {
@@ -385,7 +429,7 @@
 };
 
 &hdptxphy_hdmi0 {
-	status = "disabled";
+	status = "okay";
 };
 
 &route_hdmi0 {
@@ -398,7 +442,7 @@
 };
 
 &dp0_sound{
-	status = "disabled";
+	status = "okay";
 };
 
 &dp0 {
@@ -414,6 +458,7 @@
 	dsi0_panel: panel@0 {
 		status = "okay";
 		compatible = "simple-panel-dsi";
+		panel-name = "e549fmde";
 		reg = <0>;
 		reset-delay-ms = <20>;
 		init-delay-ms = <20>;
@@ -812,23 +857,19 @@
 &i2c3 {
 	status = "okay";
 	
-	focaltech@38 {
-		status = "okay";
-		compatible = "focaltech,fts";
+	/* Capacitive touch controller */
+	ft5x06_ts: touchscreen@38 {
+		compatible = "edt,edt-ft5406";
 		reg = <0x38>;
-		
-		interrupt-parent = <&gpio1>;
-		interrupts = <RK_PD2 IRQ_TYPE_EDGE_FALLING>;
-		
 		pinctrl-names = "default";
 		pinctrl-0 = <&tp_gpio>;
-		
-		focaltech,irq-gpio = <&gpio1 RK_PD2 IRQ_TYPE_EDGE_FALLING>;
-		focaltech,reset-gpio = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;
-		focaltech,max-touch-number = <6>;
-		focaltech,display-coords =  <0 0 1079 1919>;
-		focaltech,touchscreen-inverted-x;
-		focaltech,touchscreen-inverted-y;
+		interrupt-parent = <&gpio1>;
+		interrupts = <RK_PD2 IRQ_TYPE_EDGE_FALLING>;
+
+		touchscreen-size-x = <1079>;
+		touchscreen-size-y = <1919>;
+		touchscreen-inverted-x;
+		touchscreen-inverted-y;
 	};
 };
 
@@ -971,7 +1012,7 @@
 		ti,boost-max-current = <2000000>; /* 2000mA */
 		regulators {
 			vbus5v0_typec: vbus5v0-typec {
-				regulator-compatible = "otg-vbus";
+				regulator-compatible = "usb-otg-vbus";
 				regulator-name = "vbus5v0_typec";
 			};
 		};
@@ -1148,8 +1189,22 @@
 		usbc0_int: usbc0-int {
 			rockchip,pins = <0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>;
 		};
+
+		vcc5v0_otg_en: vcc5v0-otg-en {
+			rockchip,pins = <4 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
 	};
-	
+
+	spi0 {
+		spi0m1_pins: spi0m1-pins {
+			rockchip,pins =
+				/* spi0_clk_m1 */
+				<4 RK_PA2 8 &pcfg_pull_up_drv_level_6>,
+				/* spi0_mosi_m1 */
+				<4 RK_PA1 8 &pcfg_pull_up_drv_level_6>;
+		};
+	};
+
 	bt {
 		bt_enable_h: bt-enable-h {
 			rockchip,pins =
@@ -1186,7 +1241,6 @@
 
 &pwm14 {
 	status = "okay";
-	pinctrl-names = "active";
 	pinctrl-0 = <&pwm14m1_pins>;
 };
 
@@ -1278,24 +1332,25 @@
 		};
 	};
 };
-// &spi0 {
-// 	status = "disabled";
-// 	pinctrl-names = "default";
-// 	pinctrl-0 = <&spi0m1_pins>;
+
+&spi0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0m1_pins>;
 	
-// 	rgb@0 {
-// 		compatible = "opsco,sk9822";
-// 		status = "okay";
-// 		reg = <0>;
-// 		spi-max-frequency = <30000000>;
-// 		#address-cells = <1>;
-// 		#size-cells = <0>;
-// 		led@0 {
-// 			reg = <0>;
-// 			label = "led1";
-// 		};
-// 	};
-// };
+	rgb@0 {
+		compatible = "opsco,sk9822";
+		status = "okay";
+		reg = <0>;
+		spi-max-frequency = <30000000>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		led@0 {
+			reg = <0>;
+			label = "led1";
+		};
+	};
+};
 
 &rga3_core0 {
 	status = "okay";
@@ -1377,7 +1432,20 @@
 
 &rockchip_suspend {
 	status = "okay";
-	rockchip,sleep-debug-en = <0>;
+	rockchip,sleep-debug-en = <1>;
+	rockchip,sleep-mode-config = <
+		(0
+		| RKPM_SLP_ARMOFF_LOGOFF
+		| RKPM_SLP_PMU_PMUALIVE_32K
+		| RKPM_SLP_PMU_DIS_OSC
+		| RKPM_SLP_32K_EXT
+		)
+	>;
+	rockchip,wakeup-config = <
+		(0
+		| RKPM_GPIO_WKUP_EN
+		)
+	>;
 };
 
 &saradc {
