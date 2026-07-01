@@ -698,17 +698,21 @@
 	
 	/* Capacitive touch controller */
 	ft5x06_ts: touchscreen@38 {
-		compatible = "edt,edt-ft5406";
+		compatible = "focaltech,ft3519";
 		reg = <0x38>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&tp_gpio>;
 		interrupt-parent = <&gpio1>;
 		interrupts = <RK_PD2 IRQ_TYPE_EDGE_FALLING>;
 
-		touchscreen-size-x = <1079>;
-		touchscreen-size-y = <1919>;
-		touchscreen-inverted-x;
-		touchscreen-inverted-y;
+		focaltech,irq-gpio = <&gpio1 RK_PD2 IRQ_TYPE_EDGE_FALLING>;
+		focaltech,reset-gpio = <&gpio1 RK_PD3 GPIO_ACTIVE_HIGH>;
+		focaltech,max-touch-number = <6>;
+		focaltech,display-coords = <0 0 1079 1919>;
+		focaltech,touchscreen-inverted-x;
+		focaltech,touchscreen-inverted-y;
+		vdd-supply = <&vcc_3v3_s3>;
+		iovcc-supply = <&vcc_1v8_s0>;
 	};
 };
 

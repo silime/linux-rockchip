@@ -384,6 +384,8 @@ config TOUCHSCREEN_FTS
 	  Say Y here if you have Focaltech touch panel.
 	  If unsure, say N.
 
+source "drivers/input/touchscreen/focaltech_touch_FT3519/Kconfig"
+
 config TOUCHSCREEN_FT5726
 	tristate "Focaltech Touchscreen FT5726"
 	depends on I2C

@@ -1,0 +1,11 @@
+#
+# Focaltech Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_FTS_FT3519
+    tristate "Focaltech FT3519 Touchscreen"
+    depends on I2C
+    default m
+    help
+      Say Y here if you have a Focaltech FT3519 touch panel.
+      If unsure, say N.
