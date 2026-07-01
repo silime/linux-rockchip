@@ -344,6 +344,8 @@ patternProperties:
     description: Data Modul AG
   "^domintech,.*":
     description: Domintech Co., Ltd.
+  "^dongxingqiang,.*":
+    description: Shenzhen Dongxingqiang Tech.Co., Ltd.
   "^dongwoon,.*":
     description: Dongwoon Anatech
   "^dptechnics,.*":

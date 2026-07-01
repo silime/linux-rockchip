@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/display/panel/raydium,rm67199.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Raydium RM67199 Dongxingqiang DXQ5D4408 1080x1920 MIPI-DSI panel
+
+maintainers:
+  - Heiko Stuebner <heiko@sntech.de>
+
+allOf:
+  - $ref: panel-common.yaml#
+
+properties:
+  compatible:
+    oneOf:
+      - const: dongxingqiang,dxq5d4408
+      - const: raydium,rm67199-dxq5d4408
+
+  reg: true
+  port: true
+  reset-gpios: true
+  width-mm: true
+  height-mm: true
+  rotation: true
+
+  vbat-supply:
+    description: Main panel supply.
+
+  vddio-supply:
+    description: I/O supply.
+
+  vci-supply:
+    description: Driver logic supply.
+
+required:
+  - compatible
+  - reg
+  - reset-gpios
+  - vbat-supply
+  - vddio-supply
+  - vci-supply
+  - port
+
+additionalProperties: false
+
+examples:
+  - |
+    #include <dt-bindings/gpio/gpio.h>
+
+    dsi {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        panel@0 {
+            compatible = "dongxingqiang,dxq5d4408";
+            reg = <0>;
+            reset-gpios = <&gpio1 22 GPIO_ACTIVE_LOW>;
+            vbat-supply = <&vcc_lcd_vbat>;
+            vddio-supply = <&vcc_1v8>;
+            vci-supply = <&vcc_3v3>;
+
+            port {
+                panel_in: endpoint {
+                    remote-endpoint = <&mipi_out>;
+                };
+            };
+        };
+    };
+
+...
