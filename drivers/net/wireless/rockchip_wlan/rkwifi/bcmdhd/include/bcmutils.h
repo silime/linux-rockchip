@@ -1,7 +1,26 @@
 /*
  * Misc useful os-independent macros and functions.
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -19,6 +38,8 @@
  *
  *
  * <<Broadcom-WL-IPTag/Dual:>>
+ *
+ * Edited with the help of GENAI.
  */
 
 #ifndef	_bcmutils_h_
@@ -58,7 +79,7 @@ extern "C" {
  * the iteration.
  */
 
-#define FOREACH_BIT(c, mask)\
+#define FOREACH_BIT_SET_MASK(c, mask)\
 	for (c = BCM_FIRST_BIT(mask); mask != 0; \
 		 mask = BCM_CLR_FISRT_BIT(mask), c = BCM_FIRST_BIT(mask))
 
@@ -105,8 +126,8 @@ struct bcmstrbuf {
 	unsigned int origsize;	/* unmodified orignal buffer size in bytes */
 };
 
-#define BCMSTRBUF_LEN(b)	(b->size)
-#define BCMSTRBUF_BUF(b)	(b->buf)
+#define BCMSTRBUF_LEN(b)	b->size
+#define BCMSTRBUF_BUF(b)	b->buf
 
 struct ether_addr;
 extern char *bcm_ether_ntoa(const struct ether_addr *ea, char *buf);
@@ -141,7 +162,7 @@ extern int bcm_ether_atoe(const char *p, struct ether_addr *ea);
 
 #define SPINWAIT_TRAP(exp, us) SPINWAIT(exp, us)
 
-#elif defined(PHY_REG_TRACE_FRAMEWORK)
+#elif defined(PHY_REG_TRACE_FRAMEWORK) && !defined(COEX_CPU_BUILD)
 #include <phy_utils_log_api.h>
 #define SPINWAIT(exp, us) { \
 	uint countdown = (us) + (SPINWAIT_POLL_PERIOD - 1U); \
@@ -173,6 +194,14 @@ extern int bcm_ether_atoe(const char *p, struct ether_addr *ea);
 	while (((exp) != 0) && (uint)(countdown >= SPINWAIT_POLL_PERIOD)) { \
 		OSL_DELAY(SPINWAIT_POLL_PERIOD); \
 		countdown -= SPINWAIT_POLL_PERIOD; \
+	} \
+}
+
+#define SPINWAIT_1US(exp, us) { \
+	uint countdown = (us); \
+	while (((exp) != 0) && (uint)(countdown >= 1U)) { \
+		OSL_DELAY(1U); \
+		countdown -= 1U; \
 	} \
 }
 
@@ -231,6 +260,15 @@ extern uint pkttotlen_no_sfhtoe_hdr(osl_t *osh, void *p, uint toe_hdr_len);
 #else
 #define pkttotlen_no_sfhtoe_hdr(osh, p, hdrlen)	pkttotlen(osh, p)
 #endif /* WLCSO */
+
+typedef struct bcm_sm_log_info bcm_sm_log_info_t;
+
+#define BCM_SM_LOG_FLAG_EVENT_PRESENT (1u << 0u)
+
+bcm_sm_log_info_t *bcm_sm_logger_init(osl_t *osh, uint32 flags, uint32 num_entries,
+	uint32 module_entry_sz);
+void bcm_sm_logger_deinit(osl_t *osh, bcm_sm_log_info_t *bsli);
+void *bcm_sm_log(bcm_sm_log_info_t *bsli, uint32 state, uint32 event, void *call_site);
 
 /* Get priority from a packet and pass it back in scb (or equiv) */
 #define	PKTPRIO_VDSCP	0x100u		/* DSCP prio found after VLAN tag */
@@ -293,36 +331,35 @@ extern int bcm_atoipv4(const char *p, struct ipv4_addr *ip);
 
 /* delay */
 extern void bcm_mdelay(uint ms);
+
 /* variable access */
 #if defined(BCM_RECLAIM)
 extern bool _nvram_reclaim_enb;
-#define NVRAM_RECLAIM_ENAB() (_nvram_reclaim_enb)
+#define NVRAM_RECLAIM_ENAB() _nvram_reclaim_enb
 #ifdef BCMDBG
-#define NVRAM_RECLAIM_CHECK(name)							\
+#define NVRAM_RECLAIM_CHECK_EXT(name, ret)						\
 	if (NVRAM_RECLAIM_ENAB() && (bcm_attach_part_reclaimed == TRUE)) {		\
 		printf("NVRAM already reclaimed, %s\n", (name));			\
 		GCC_DIAGNOSTIC_PUSH_SUPPRESS_NULL_DEREF();				\
 		*(char*) 0 = 0; /* TRAP */						\
 		GCC_DIAGNOSTIC_POP();							\
-		return NULL;								\
+		return (ret);								\
 	}
 #else /* BCMDBG */
-#define NVRAM_RECLAIM_CHECK(name)							\
+#define NVRAM_RECLAIM_CHECK_EXT(name, ret)						\
 	if (NVRAM_RECLAIM_ENAB() && (bcm_attach_part_reclaimed == TRUE)) {		\
 		GCC_DIAGNOSTIC_PUSH_SUPPRESS_NULL_DEREF();				\
 		*(char*) 0 = 0; /* TRAP */						\
 		GCC_DIAGNOSTIC_POP();							\
-		return NULL;								\
+		return (ret);								\
 	}
 #endif /* BCMDBG */
 #else /* BCM_RECLAIM */
-#define NVRAM_RECLAIM_CHECK(name)
+#define NVRAM_RECLAIM_CHECK_EXT(name, ret)
 #endif /* BCM_RECLAIM */
+#define NVRAM_RECLAIM_CHECK(name) NVRAM_RECLAIM_CHECK_EXT(name, NULL)
 
-#ifndef ATE_BUILD
-const
-#endif /* ATE_BUILD */
-char *getvar(char *vars, const char *name);
+const char *getvar(char *vars, const char *name);
 int getintvar(char *vars, const char *name);
 int getintvararray(char *vars, const char *name, int index);
 int getintvararraysize(char *vars, const char *name);
@@ -339,9 +376,9 @@ extern uint get_slicespecific_var_name(osl_t *osh, char *vars_table_accessor,
 #if defined(BCMNVRAMR) || defined(BCMNVRAMW)
 extern uint getgpiopin(char *vars, char *pin_name, uint def_pin);
 #endif /* BCMNVRAMR || BCMNVRAMW */
-#ifdef BCMDBG
+#if defined(BCMDBG) || defined(DHD_DEBUG)
 extern void prpkt(const char *msg, osl_t *osh, void *p0);
-#endif /* BCMDBG */
+#endif /* BCMDBG || DHD_DEBUG */
 #ifdef BCMPERFSTATS
 extern void bcm_perf_enable(void);
 extern void bcmstats(char *fmt);
@@ -390,7 +427,7 @@ typedef struct bcm_iovar {
 	const char *name;	/* name for lookup and display */
 	uint16 varid;		/* id for switch */
 	uint16 flags;		/* driver-specific flag bits */
-	uint8 flags2;		 /* driver-specific flag bits */
+	uint8 flags2;		/* driver-specific flag bits */
 	uint8 type;		/* base type of argument */
 	uint16 minlen;		/* min length for buffer vars */
 } bcm_iovar_t;
@@ -450,6 +487,9 @@ uint16 bcmhex2bin(const uint8* hex, uint hex_len, uint8 *buf, uint buf_len);
 #define IOVT_UINT32	7	/* unsigned int 32 bits */
 #define IOVT_BUFFER	8	/* buffer is size-checked as per minlen */
 #define BCM_IOVT_VALID(type) (((unsigned int)(type)) <= IOVT_BUFFER)
+
+/* SMBM handle type */
+typedef uint16 smbm_handle_t;
 
 /* Initializer for IOV type strings */
 #define BCM_IOV_TYPE_INIT { \
@@ -561,6 +601,10 @@ uint16 bcmhex2bin(const uint8* hex, uint hex_len, uint8 *buf, uint buf_len);
 
 #define DELTA(curr, prev) ((curr) > (prev) ? ((curr) - (prev)) : \
 	(0xffffffff - (prev) + (curr) + 1))
+
+#define DELTA64(curr, prev) ((curr) > (prev) ? ((curr) - (prev)) : \
+	(0xffffffffffffffff - (prev) + (curr) + 1))
+
 #define CEIL(x, y)		(((x) + ((y) - 1)) / (y))
 #define ROUNDUP(x, y)		((((x) + ((y) - 1)) / (y)) * (y))
 #define ROUNDDN(p, align)	((p) & ~((align) - 1))
@@ -573,17 +617,11 @@ uint16 bcmhex2bin(const uint8* hex, uint hex_len, uint8 *buf, uint buf_len);
 #define VALID_MASK(mask)	!((mask) & ((mask) + 1))
 
 #ifndef OFFSETOF
-#if ((__GNUC__ >= 4) && (__GNUC_MINOR__ >= 8))
-	/* GCC 4.8+ complains when using our OFFSETOF macro in array length declarations. */
+#if defined(__GNUC__) || defined(BCMFUZZ)
 	#define	OFFSETOF(type, member)	__builtin_offsetof(type, member)
 #else
-#ifdef BCMFUZZ
-	/* use 0x10 offset to avoid undefined behavior error due to NULL access */
-	#define OFFSETOF(type, member)	(((uint)(uintptr)&((type *)0x10)->member) - 0x10)
-#else
 	#define	OFFSETOF(type, member)	((uint)(uintptr)&((type *)0)->member)
-#endif /* BCMFUZZ */
-#endif /* GCC 4.8 or newer */
+#endif /* GCC || BCMFUZZ */
 #endif /* OFFSETOF */
 
 #ifndef CONTAINEROF
@@ -659,6 +697,18 @@ extern void clr_bitrange_u32(void *array, uint start, uint end, uint maxbit);
 extern int bcm_find_fsb(uint32 num);
 
 #define	isbitset(a, i)	(((a) & (1u << (i))) != 0)
+#define	isbitclr(a, i)	(((a) & (1u << (i))) == 0)
+
+#define FOREACH_BIT(a, i) \
+	for ((i) = 0; ((i) < (sizeof(a) * NBBY)); (i)++)
+
+#define FOREACH_BIT_SET(a, i) \
+	FOREACH_BIT(a, i) \
+		if (isbitset((a), (i)))
+
+#define FOREACH_BIT_CLR(a, i) \
+	FOREACH_BIT(a, i) \
+		if (isbitclr((a), (i)))
 
 #if defined DONGLEBUILD
 #define	NBITS(type)	(sizeof(type) * 8)
@@ -730,6 +780,9 @@ DECLARE_MAP_API(8, 2, 3, 3u, 0x00FFu) /* setbit8() and getbit8() */
 /* basic mux operation - can be optimized on several architectures */
 #define MUX(pred, true, false) ((pred) ? (true) : (false))
 
+/* find modulo of a number */
+#define MOD(x, bound) MUX(ISPOWEROF2(bound), ((x) & ((bound) - 1)), ((x) % (bound)))
+
 /* modulo inc/dec - assumes x E [0, bound - 1] */
 #define MODDEC(x, bound) MUX((x) == 0, (bound) - 1, (x) - 1)
 #define MODINC(x, bound) MUX((x) == (bound) - 1, 0, (x) + 1)
@@ -757,49 +810,89 @@ DECLARE_MAP_API(8, 2, 3, 3u, 0x00FFu) /* setbit8() and getbit8() */
 #define CRC32_GOOD_VALUE  0xdebb20e3u		/* Good final CRC32 checksum value */
 
 #ifdef DONGLEBUILD
-#define MACF				"MACADDR:%08x%04x"
-#define ETHERP_TO_MACF(ea)		(uint32)bcm_ether_ntou64(ea), \
-					(uint32)(bcm_ether_ntou64(ea) >> 32)
-
-#define CONST_ETHERP_TO_MACF(ea)	ETHERP_TO_MACF(ea)
-
-#define ETHER_TO_MACF(ea)		ETHERP_TO_MACF(&ea)
-
+#define MACF			"MACADDR:%08x%04x"
+#define ETHERP_TO_MACF(ea)	(uint32)bcm_ether_ntou64(ea), \
+				(uint32)(bcm_ether_ntou64(ea) >> 32)
 #else
-/* use for direct output of MAC address in printf etc */
-#define MACF				"%02x:%02x:%02x:%02x:%02x:%02x"
-#define ETHERP_TO_MACF(ea)	((const struct ether_addr *) (ea))->octet[0], \
-				((const struct ether_addr *) (ea))->octet[1], \
-				((const struct ether_addr *) (ea))->octet[2], \
-				((const struct ether_addr *) (ea))->octet[3], \
-				((const struct ether_addr *) (ea))->octet[4], \
-				((const struct ether_addr *) (ea))->octet[5]
-
-#define CONST_ETHERP_TO_MACF(ea)	ETHERP_TO_MACF(ea)
-
-#define ETHER_TO_MACF(ea)	(ea).octet[0], \
-				(ea).octet[1], \
-				(ea).octet[2], \
-				(ea).octet[3], \
-				(ea).octet[4], \
-				(ea).octet[5]
+#define MACF			"%02x:%02x:%02x:%02x:%02x:%02x"
+#define ETHERP_TO_MACF(ea)	((const struct ether_addr *)(ea))->octet[0], \
+				((const struct ether_addr *)(ea))->octet[1], \
+				((const struct ether_addr *)(ea))->octet[2], \
+				((const struct ether_addr *)(ea))->octet[3], \
+				((const struct ether_addr *)(ea))->octet[4], \
+				((const struct ether_addr *)(ea))->octet[5]
 #endif /* DONGLEBUILD */
+
+#define ETHER_TO_MACF(ea)	ETHERP_TO_MACF(&ea)
+#define CONST_ETHERP_TO_MACF(ea) ETHERP_TO_MACF(ea)
+
+/* chanspec format */
+#ifdef DONGLEBUILD
+#define CHF			"CHSPEC:X%04X"
+#define CHSPEC_TO_CHF(ch, buf)	(BCM_REFERENCE(buf), ch)
+#else
+#define CHF			"%s"
+#define CHSPEC_TO_CHF(ch, buf)	(wf_chspec_ntoa_ex(ch, buf), buf)
+#endif /* DONGLEBUILD */
+
+/* SSID format ('ssid' is at least 4 octet long i.e. it is DOT11_MAX_SSID_LEN long!) */
+/* wlc_format_ssid() is defined in wlc_dbg.h so it's better to either move these defines
+ * to wl layer or move wlc_format_ssid) to bcmutils component...
+ */
+#ifdef DONGLEBUILD
+#define SSIDF			"SSID:X%X..%X:L%u"
+#define SSIDP_TO_SSIDF(ssid, ssid_len, ssidbuf) \
+				ssid_len > 0 ? ntoh32_ua(&((const uint8 *)(ssid))[0]) : 0, \
+				BCM_EXTENSION \
+				({ \
+				uint pos = ssid_len > 8 ? ssid_len - 4 : ssid_len > 4 ? 4 : 0; \
+				pos > 0 ? ntoh32_ua(&((const uint8 *)(ssid))[pos]) : 0; \
+				}), \
+				(BCM_REFERENCE(ssidbuf), ssid_len)
+#else
+#define SSIDF			"\"%s\""
+#define SSIDP_TO_SSIDF(ssid, ssid_len, ssidbuf) \
+				(wlc_format_ssid(ssidbuf, ssid, ssid_len), ssidbuf)
+#endif /* DONGLEBUILD */
+
+/* IP v4 Address format */
+#ifdef DONGLEBUILD
+#define IPV4F			"IPADDR:%08X"
+#define IPV4P_TO_IPV4F(ip)	ntoh32_ua(((const struct ipv4_addr *)(ip))->addr)
+#else
+#define IPV4F			"\"%u.%u.%u.%u\""
+#define IPV4P_TO_IPV4F(ip)	((const struct ipv4_addr *)(ip))->addr[0], \
+				((const struct ipv4_addr *)(ip))->addr[1], \
+				((const struct ipv4_addr *)(ip))->addr[2], \
+				((const struct ipv4_addr *)(ip))->addr[3]
+#endif /* DONGLEBUILD */
+
+/* CC or Country Abbreviation format */
+#ifdef DONGLEBUILD
+#define CCF			"CC:%c%c"
+#define CCP_TO_CCF(cc)		((const uint8 *)(cc))[0], \
+				((const uint8 *)(cc))[1]
+#else
+#define CCF			"\"%s\""
+#define CCP_TO_CCF(cc)		((const uint8 *)(cc))
+#endif /* DONGLEBUILD */
+
 /* use only for debug, the string length can be changed
  * If you want to use this macro to the logic,
  * USE MACF instead
  */
 #define MACDBG_FULL		"%02x:%02x:%02x:%02x:%02x:%02x"
-#define MAC2STRDBG_FULL(ea)	((const uint8*)(ea))[0], \
-			((const uint8*)(ea))[1], \
-			((const uint8*)(ea))[2], \
-			((const uint8*)(ea))[3], \
-			((const uint8*)(ea))[4], \
-			((const uint8*)(ea))[5]
+#define MAC2STRDBG_FULL(ea)	((const uint8 *)(ea))[0], \
+				((const uint8 *)(ea))[1], \
+				((const uint8 *)(ea))[2], \
+				((const uint8 *)(ea))[3], \
+				((const uint8 *)(ea))[4], \
+				((const uint8 *)(ea))[5]
 
 #define MACDBG_SIMPLE		"%02x:xx:xx:xx:x%x:%02x"
-#define MAC2STRDBG_SIMPLE(ea)	((const uint8*)(ea))[0], \
-			(((const uint8*)(ea))[4] & 0xf), \
-			((const uint8*)(ea))[5]
+#define MAC2STRDBG_SIMPLE(ea)	((const uint8 *)(ea))[0], \
+				(((const uint8 *)(ea))[4] & 0xf), \
+				((const uint8 *)(ea))[5]
 
 #if !defined(SIMPLE_MAC_PRINT)
 #define MACDBG MACDBG_FULL
@@ -809,13 +902,32 @@ DECLARE_MAP_API(8, 2, 3, 3u, 0x00FFu) /* setbit8() and getbit8() */
 #define MAC2STRDBG MAC2STRDBG_SIMPLE
 #endif /* SIMPLE_MAC_PRINT */
 
-#define MACOUIDBG "%02x:%x:%02x"
-#define MACOUI2STRDBG(ea)	((const uint8*)(ea))[0], \
-				((const uint8*)(ea))[1] & 0xf, \
-				((const uint8*)(ea))[2]
+#define MACOUIDBG		"%02x:%x:%02x"
+#define MACOUI2STRDBG(ea)	((const uint8 *)(ea))[0], \
+				((const uint8 *)(ea))[1] & 0xf, \
+				((const uint8 *)(ea))[2]
 
-#define MACOUI "%02x:%02x:%02x"
+#define MACOUI			"%02x:%02x:%02x"
 #define MACOUI2STR(ea) (ea)[0], (ea)[1], (ea)[2]
+
+#ifdef DONGLEBUILD
+#define PMKIDDBG		"%08x%08x%08x%08x"
+#define PMKID2STRDBG(pmkid)	(uint32)HTON32(*((const uint32 *)&(pmkid)[ 0])), \
+				(uint32)HTON32(*((const uint32 *)&(pmkid)[ 4])), \
+				(uint32)HTON32(*((const uint32 *)&(pmkid)[ 8])), \
+				(uint32)HTON32(*((const uint32 *)&(pmkid)[12]))
+#else
+#define PMKIDDBG		"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
+#define PMKID2STRDBG(pmkid)	(pmkid)[ 0], (pmkid)[ 1], (pmkid)[ 2], (pmkid)[ 3], \
+				(pmkid)[ 4], (pmkid)[ 5], (pmkid)[ 6], (pmkid)[ 7], \
+				(pmkid)[ 8], (pmkid)[ 9], (pmkid)[10], (pmkid)[11], \
+				(pmkid)[12], (pmkid)[13], (pmkid)[14], (pmkid)[15]
+#endif /* DONGLEBUILD */
+
+#define PMKID_IS_NULL(pmkid)	(((*((const uint32 *)&(pmkid)[ 0])) | \
+				  (*((const uint32 *)&(pmkid)[ 4])) | \
+				  (*((const uint32 *)&(pmkid)[ 8])) | \
+				  (*((const uint32 *)&(pmkid)[12]))) == 0)
 
 /* bcm_format_flags() bit description structure */
 typedef struct bcm_bit_desc {
@@ -870,6 +982,7 @@ xor_128bit_block(const uint8 *src1, const uint8 *src2, uint8 *dst)
 /* crc */
 uint8 hndcrc8(const uint8 *p, uint nbytes, uint8 crc);
 uint16 hndcrc16(const uint8 *p, uint nbytes, uint16 crc);
+uint16 hndcrc16ansi(const uint8 *p, uint nbytes, uint16 crc);
 uint32 hndcrc32(const uint8 *p, uint nbytes, uint32 crc);
 
 /* format/print */
@@ -897,6 +1010,7 @@ extern void prhexstr_msb(const char *prefix, const uint8 *buf, uint len, bool ne
 
 /* bcmerror */
 extern const char *bcmerrorstr(int bcmerror);
+int bcm_get_last_err(void);
 
 #if defined(BCMDBG) || defined(WLMSG_ASSOC)
 /* get 802.11 frame name based on frame kind - see frame types FC_.. in 802.11.h */
@@ -924,7 +1038,7 @@ struct fielddesc {
 };
 
 extern void bcm_binit(struct bcmstrbuf *b, char *buf, uint size);
-#define bcm_bsize(b) ((b)->size)
+#define bcm_bsize(b) (b)->size
 #define bcm_breset(b) do {bcm_binit(b, (b)->origbuf, (b)->origsize);} while (0)
 extern void bcm_bprhex(struct bcmstrbuf *b, const char *msg, bool newline,
 	const uint8 *buf, uint len);
@@ -957,7 +1071,7 @@ extern uint bcm_mkiovar(const char *name, const char *data, uint datalen, char *
 
 enum pkttrace_info {
 	PKTLIST_PRECQ,		/* Pkt in Prec Q */
-	PKTLIST_FAIL_PRECQ, 	/* Pkt failed to Q in PRECQ */
+	PKTLIST_FAIL_PRECQ,	/* Pkt failed to Q in PRECQ */
 	PKTLIST_DMAQ,		/* Pkt in DMA Q */
 	PKTLIST_MI_TFS_RCVD,	/* Received TX status */
 	PKTLIST_TXDONE,		/* Pkt TX done */
@@ -984,11 +1098,12 @@ typedef struct {
 
 extern void pktlist_add(pktlist_info_t *pktlist, void *p, int len, char *file);
 extern void pktlist_remove(pktlist_info_t *pktlist, void *p);
-extern char* pktlist_dump(pktlist_info_t *pktlist, char *buf);
+extern char* pktlist_dump(pktlist_info_t *pktlist, char *buf, uint bufsz);
 #ifdef BCMDBG_PTRACE
 extern void pktlist_trace(pktlist_info_t *pktlist, void *pkt, uint16 bit);
 #endif /* BCMDBG_PTRACE */
 #endif  /* BCMDBG_PKT */
+unsigned int trim_nvram_spaces(char *varbuf, unsigned int len);
 unsigned int process_nvram_vars(char *varbuf, unsigned int len);
 bool replace_nvram_variable(char *varbuf, unsigned int buflen, const char *variable,
 	unsigned int *datalen);
@@ -1198,11 +1313,14 @@ extern bool id16_map_audit(void * id16_map_hndl);
 void bcm_add_64(uint32* r_hi, uint32* r_lo, uint32 offset);
 void bcm_sub_64(uint32* r_hi, uint32* r_lo, uint32 offset);
 
-#define MASK_32_BITS	(~0)
+#define MASK_32_BITS	~0
 #define MASK_8_BITS	((1 << 8) - 1)
 
 #define EXTRACT_LOW32(num)	(uint32)(num & MASK_32_BITS)
 #define EXTRACT_HIGH32(num)	(uint32)(((uint64)num >> 32) & MASK_32_BITS)
+
+#define LEN_TO_512KB(_x)	((_x) >> 8u)
+#define LEN_FROM_512KB(_x)	((_x) << 8u)
 
 #define MAXIMUM(a, b) ((a > b) ? a : b)
 #define MINIMUM(a, b) ((a < b) ? a : b)
@@ -1368,23 +1486,27 @@ int valid_bcmerror(int e);
 /* Used to pass in a macro variable that gets expanded and then stringified */
 #define BCM_EXTENDED_STRINGIFY(s) BCM_STRINGIFY(s)
 
+extern uint32 ip_cksum_partial(uint32 sum, uint8 *val8, uint32 count);
+/* calculate IP checksum */
+extern uint16 ip_cksum(uint32 sum, uint8 *val8, uint32 count);
+
 /* calculate IPv4 header checksum
  * - input ip points to IP header in network order
  * - output cksum is in network order
  */
-uint16 ipv4_hdr_cksum(uint8 *ip, uint ip_len);
+extern uint16 ipv4_hdr_cksum(uint8 *ip, uint ip_len);
 
 /* calculate IPv4 TCP header checksum
  * - input ip and tcp points to IP and TCP header in network order
  * - output cksum is in network order
  */
-uint16 ipv4_tcp_hdr_cksum(uint8 *ip, uint8 *tcp, uint16 tcp_len);
+extern uint16 ipv4_tcp_hdr_cksum(uint8 *ip, uint8 *tcp, uint16 tcp_len);
 
 /* calculate IPv6 TCP header checksum
  * - input ipv6 and tcp points to IPv6 and TCP header in network order
  * - output cksum is in network order
  */
-uint16 ipv6_tcp_hdr_cksum(uint8 *ipv6, uint8 *tcp, uint16 tcp_len);
+extern uint16 ipv6_tcp_hdr_cksum(uint8 *ipv6, uint8 *tcp, uint16 tcp_len);
 
 #ifdef __cplusplus
 	}
@@ -1438,8 +1560,8 @@ void counter_printlog(counter_tbl_t *ctr_tbl);
 #define CALL_SITE ((void*) 0)
 #endif
 #ifdef SHOW_LOGTRACE
-#define TRACE_LOG_BUF_MAX_SIZE 1900
-#define RTT_LOG_BUF_MAX_SIZE 1900
+#define TRACE_LOG_BUF_MAX_SIZE	2000
+#define RTT_LOG_BUF_MAX_SIZE	1900
 #define BUF_NOT_AVAILABLE	0
 #define NEXT_BUF_NOT_AVAIL	1
 #define NEXT_BUF_AVAIL		2
@@ -1469,8 +1591,6 @@ typedef struct {
 	uint32 n_bytes;              /**< nbytes in array val[] */
 	uint32 val[BCM_FLEX_ARRAY];  /**< out: values that were read out of registers or memory */
 } dump_dongle_out_t;
-
-extern uint32 sqrt_int(uint32 value);
 
 extern uint8 bcm_get_ceil_pow_2(uint val);
 
@@ -1560,24 +1680,32 @@ count_trailing_zeros(uint32 val)
 
 int buf_shift_right(uint8 *buf, uint16 len, uint8 bits);
 
+/* Take a variable number of args and replace with only the first.
+ * (UNUSED arg ensures that there is at least one argument in '...', as required by (pre-C23) ISO C
+ * for variadic macros).
+ */
+#define FIRST_ARG_HELPER(a1, ...)	a1
+#define FIRST_ARG(...)			FIRST_ARG_HELPER(__VA_ARGS__, UNUSED)
+
 #ifdef DONGLEBUILD
 extern int print_string(const char *str);
 
+/* Generate function name by joining 'fn' arg with number of variable args.
+ * (UNUSED arg ensures that there is at least one argument in '...', as required by (pre-C23) ISO C
+ * for variadic macros).
+ */
 #define _NUM_ARGS_FN(fn, _1, _2, _3, _4, _5, _6, _7, _8, _9, \
 	       _A, _B, _C, _D, _E, _F, N, ...) fn ## N
 #define NUM_ARGS_FN(fn, ...)	\
-	_NUM_ARGS_FN(fn, __VA_ARGS__, x, x, x, x, x, x, x, x, x, x, x, x, x, x, 0)
+	_NUM_ARGS_FN(fn, __VA_ARGS__, x, x, x, x, x, x, x, x, x, x, x, x, x, x, 0, UNUSED)
 
-#define FIRST_ARG(a1, ...)	a1
-#define NEXT_ARGS(a1, ...)	__VA_ARGS__
-
-#define printf_ps_0(str, ...)	print_string(str)
-#define printf_ps_x(str, ...)	printf(str, __VA_ARGS__)
+#define printf_ps_0(str, unused)	print_string(str)
+#define printf_ps_x(str, unused, ...)	printf(str, __VA_ARGS__)
 
 #define posttrap_printf(...)	\
 	do { \
 		static const char BCMPOST_TRAP_RODATA(p_str)[] = FIRST_ARG(__VA_ARGS__); \
-		NUM_ARGS_FN(printf_ps_, __VA_ARGS__)(p_str, NEXT_ARGS(__VA_ARGS__)); \
+		NUM_ARGS_FN(printf_ps_, __VA_ARGS__)(p_str, __VA_ARGS__); \
 		BCM_REFERENCE(p_str); \
 	} while (0)
 
@@ -1608,6 +1736,54 @@ extern uint16 bcm_mwbmap_total_pktid(struct bcm_mwbmap * mwbmap_hdl);
 extern uint64 div_1K(uint64 q);
 extern uint64 div_1M(uint64 q);
 
-#define NS_PER_MS			(1000000u)
+#define NS_PER_MS			1000000u
+
+/* Stringizing */
+#define _BCM_STR(x) #x
+#define BCM_STR(x) _BCM_STR(x)
+
+/* For use in ecounters XTLV gather desc packing */
+typedef struct ver_len_info {
+	uint16 ver;
+	uint16 len;
+} ver_len_info_t;
+
+/* Nvram related constants and magics */
+#define NV_SIG_MAGIC_VAL {0xCD, 0xCA, 0xDC, 0xAC, 0xBA, 0xB0, 0xAB, 0x0B}
+#define NV_SIG_MAGIC_SZ 8
+#define NV_SIG_KEY_LEN_SZ sizeof(uint16)
+#define NV_SIG_HDR_SZ (NV_SIG_MAGIC_SZ + NV_SIG_KEY_LEN_SZ)
+#define NVRAM_SIG_MIN_SZ 204
+/* NVRAM extension */
+#define NV_EXT_MAGIC "ENDOFEXT"
+#define NV_EXT_MAGIC_SZ 8
+#define NV_EXT_KEY "rt_extension"
+#define NV_EXT_KEY_SZ 12
+#define NV_MAX_RT_EXT 200
+
+/* 32/16/8 bits list with 2^16 capacity.
+ * When being used to carry out data from an API the caller of the API must initialize the cnt field
+ * to indicate the available array size of the elem field and the API must update the cnt field to
+ * indicate the used array size of the elem field before returning to the caller.
+ */
+typedef struct bcm_uint32_list {
+	uint16	cnt;		/* element count in the element array */
+	uint8	PAD[2];
+	uint32	elem[];		/* element array */
+} bcm_uint32_list_t;
+
+typedef struct bcm_uint16_list {
+	uint16	cnt;		/* element count in the element array */
+	uint16	elem[];		/* element array */
+} bcm_uint16_list_t;
+
+typedef struct bcm_uint8_list {
+	uint16	cnt;		/* element count in the element array */
+	uint8	elem[];		/* element array */
+} bcm_uint8_list_t;
+
+#if defined(WLC_NVRAMSIG)
+int getvarsig(const uint8 **sig, uint *ssize, const char **var, int *vsize, uint idx);
+#endif /* WLC_NVRAMSIG */
 
 #endif	/* _bcmutils_h_ */

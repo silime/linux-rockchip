@@ -4,7 +4,26 @@
  * This file describes the payloads of event log entries that are data buffers
  * rather than formatted string entries. The contents are generally XTLVs.
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -52,7 +71,7 @@ typedef struct enhanced_ts_message {
 	uint8 data[];
 } ets_msg_t;
 
-#define ENHANCED_TS_MSG_VERSION_1 (1u)
+#define ENHANCED_TS_MSG_VERSION_1 1u
 
 /**
  * Enhanced timestamp message, version 1
@@ -67,7 +86,7 @@ typedef struct enhanced_ts_message_v1 {
 /**
  * Enhanced timestamp message, version 2
  */
-#define ENHANCED_TS_MSG_VERSION_2 (2u)
+#define ENHANCED_TS_MSG_VERSION_2 2u
 typedef struct enhanced_ts_message_v2 {
 	uint64 sysuptime_ns;		/* sysuptime in ns */
 	uint64 ets_write_ptm_time;	/* PTM time at ETS message */
@@ -113,7 +132,7 @@ typedef struct txq_summary {
 	uint16 plen[BCM_FLEX_ARRAY];  /* array of lengths of each prec/fifo in the queue */
 } txq_summary_t;
 
-#define TXQ_SUMMARY_LEN                   (OFFSETOF(txq_summary_t, plen))
+#define TXQ_SUMMARY_LEN                   OFFSETOF(txq_summary_t, plen)
 #define TXQ_SUMMARY_FULL_LEN(num_q)       (TXQ_SUMMARY_LEN + (num_q) * sizeof(uint16))
 
 typedef struct txq_summary_v2 {
@@ -127,7 +146,7 @@ typedef struct txq_summary_v2 {
 	uint16 plen[BCM_FLEX_ARRAY];  /* array of lengths of each prec/fifo in the queue */
 } txq_summary_v2_t;
 
-#define TXQ_SUMMARY_V2_LEN                (OFFSETOF(txq_summary_v2_t, plen))
+#define TXQ_SUMMARY_V2_LEN                OFFSETOF(txq_summary_v2_t, plen)
 #define TXQ_SUMMARY_V2_FULL_LEN(num_q)    (TXQ_SUMMARY_V2_LEN + (num_q) * sizeof(uint16))
 
 /**
@@ -146,7 +165,7 @@ typedef struct scb_subq_summary {
 	uint16 plen[BCM_FLEX_ARRAY];  /* array of lengths of each prec/fifo in the queue */
 } scb_subq_summary_t;
 
-#define SCB_SUBQ_SUMMARY_LEN              (OFFSETOF(scb_subq_summary_t, plen))
+#define SCB_SUBQ_SUMMARY_LEN              OFFSETOF(scb_subq_summary_t, plen)
 #define SCB_SUBQ_SUMMARY_FULL_LEN(num_q)  (SCB_SUBQ_SUMMARY_LEN + (num_q) * sizeof(uint16))
 
 /* scb_subq_summary_t.flags for APPS */
@@ -199,7 +218,7 @@ typedef struct bsscfg_q_summary {
 	uint16 plen[BCM_FLEX_ARRAY]; /* array of lengths of each prec/fifo in the queue */
 } bsscfg_q_summary_t;
 
-#define BSSCFG_Q_SUMMARY_LEN              (OFFSETOF(bsscfg_q_summary_t, plen))
+#define BSSCFG_Q_SUMMARY_LEN              OFFSETOF(bsscfg_q_summary_t, plen)
 #define BSSCFG_Q_SUMMARY_FULL_LEN(num_q)  (BSSCFG_Q_SUMMARY_LEN + (num_q) * sizeof(uint16))
 
 /**
@@ -216,7 +235,7 @@ typedef struct xtlv_uc_txs {
 	uint32 w[BCM_FLEX_ARRAY];   /* var len array of words */
 } xtlv_uc_txs_t;
 
-#define XTLV_UCTXSTATUS_LEN                (OFFSETOF(xtlv_uc_txs_t, w))
+#define XTLV_UCTXSTATUS_LEN                OFFSETOF(xtlv_uc_txs_t, w)
 #define XTLV_UCTXSTATUS_FULL_LEN(words)    (XTLV_UCTXSTATUS_LEN + (words) * sizeof(uint32))
 
 #define SCAN_SUMMARY_VERSION_1	1u
@@ -242,7 +261,8 @@ typedef struct xtlv_uc_txs {
 #define WL_SSUM_MODE_SHIFT	9u	/* shift mode scan operation */
 
 /* Common bits for channel and scan summary info */
-#define SCAN_SUM_CHAN_RESHED	0x1000 /* Bit 12 as resched scan for chaninfo and scan summary */
+#define SCAN_SUM_CHAN_RESHED		0x1000 /* Bit 12 resched scan for chaninfo/scan summary */
+#define SCAN_SUM_CHAN_SC_EXTENDED_SC	0x2000 /* Bit 13 indicates MultiScan is used */
 
 #define WL_SSUM_CLIENT_ASSOCSCAN	0x0u	/* Log as scan requested client is assoc scan */
 #define WL_SSUM_CLIENT_ROAMSCAN		0x1u	/* Log as scan requested client is roam scan */
@@ -285,7 +305,11 @@ typedef struct wl_scan_channel_info {
 
 typedef struct wl_scan_channel_info_v2 {
 	uint16 chanspec;			/* chanspec scanned */
-	uint16 reserv;
+	uint16 ms_chans;			/* if SCAN_SUM_CHAN_SC_EXTENDED_SC is set,
+						 * it contains MS channels in the format of
+						 * 0xb61 = chan[0]=1,chan[1]=6,chan[2]=11
+						 * Assumed to be 20MHz only.
+						 */
 	uint32 start_time;			/* Scan start time in
 						* milliseconds for the chanspec
 						* or home_dwell time start
@@ -305,11 +329,18 @@ typedef struct wl_scan_channel_info_v2 {
 						*/
 } wl_scan_channel_info_v2_t;
 
+/* Keeping the SSID count to '1' as currently no
+ * plan to support multiple SSID parsing in
+ * SCAN SUM.
+ */
+#define SCN_SUM_SSID_CNT	1u
+
+/* This struct is currently depricated. */
 typedef struct wl_scan_summary_info {
 	uint32 total_chan_num;				/* Total number of channels scanned */
 	uint32 scan_start_time;				/* Scan start time in milliseconds */
 	uint32 scan_end_time;				/* Scan end time in milliseconds */
-	wl_scan_ssid_info_t ssid[BCM_FLEX_ARRAY];	/* SSID being scanned in current
+	wl_scan_ssid_info_t ssid[SCN_SUM_SSID_CNT];	/* SSID being scanned in current
 							* channel. For future use
 							*/
 } wl_scan_summary_info_t;
@@ -468,7 +499,8 @@ struct wl_scan_summary_v3 {
 				 * 6G channels was dwelled only for FILS duration.
 				 */
 				/* flags[12] SCAN_SUM_CHAN_RESHED indicate scan rescheduled */
-				/* flags[7:11, 13:15] = reserved */
+				/* flags[7:11, 13:14] = reserved */
+				/* flags[15] = SCAN_SUM_CHAN_SC_EXTENDED_SC indicats MultiScanPhy */
 				/* when scan_summary_info is used, */
 				/* the following flag bits are used: */
 				/* flags[1] or BAND5G_SIB_ENAB = */
@@ -487,7 +519,8 @@ struct wl_scan_summary_v3 {
 				 * WL_SCAN_MODE_LOW_POWER 2u
 				 */
 				/* flags[12] SCAN_SUM_CHAN_RESHED indicate scan rescheduled */
-				/* flags[13:15] = reserved */
+				/* flags[13] = SCAN_SUM_CHAN_SC_EXTENDED_SC indicats MultiScanPhy */
+				/* flags[14:15] = reserved */
 	union {
 		wl_scan_channel_info_v2_t scan_chan_info;	/* scan related information
 							* for each channel scanned
@@ -498,7 +531,7 @@ struct wl_scan_summary_v3 {
 	} u;
 };
 
-/* Raom target evaluation detail data type */
+/* Roam target evaluation detail data type */
 typedef enum {
 	WL_ROAM_TRGT_EVAL_BASIC		= 1u,
 	WL_ROAM_TRGT_EVAL_RSSI_SCORE	= 2u,
@@ -596,6 +629,79 @@ typedef struct wl_rrm_bcn_rpt_record_v1 {
 	int32  snr;
 } wl_rrm_bcn_rpt_record_v1_t;
 
+/* Roam 802.11k/v/r report data type
+ * Host may map the following types of corresponding structures to EVENT_LOG_TAG_RRM_11KVR_RPT
+ */
+typedef enum {
+	WLC_RRM_BCN_RPT_REQ		= 1u,
+	WLC_RRM_BCN_RPT_RESP		= 2u,
+	WLC_RRM_NBR_RPT_REQ		= 3u,
+	WLC_RRM_NBR_RPT_RESP		= 4u,
+	WLC_WNM_DMS_REQ			= 5u,
+	WLC_WNM_DMS_RESP		= 6u,
+	WLC_FBT_ODS_REQ			= 7u,
+	WLC_FBT_ODS_RESP		= 8u,
+	WL_ROAM_11KVR_RPT_MAX
+} wl_roam_11kvr_report_eval_msg_type_t;
+
+#define WLC_RRM_BCN_RPT_REQ_V1	1u
+typedef struct wl_roam_11kvr_bcn_rpt_req_v1 {
+	uint32 type;		/* = WLC_RRM_BCN_RPT_REQ (1) */
+	uint32 ver;		/* structure version */
+	uint32 reg;		/* operating class */
+	uint32 channel;		/* number of requesting channel */
+	uint32 bcn_mode;
+	uint32 bssid_hi;	/* 32-bit MSB MAC address */
+	uint32 bssid_lo;	/* 16-bit LSB MAC address */
+	uint32 duration;
+	uint32 channel_num;
+	uint32 chanspec;
+} wl_roam_11kvr_bcn_rpt_req_v1_t;
+
+#define WLC_RRM_BCN_RPT_RESP_V1	1u
+typedef struct wl_roam_11kvr_bcn_rpt_resp_v1 {
+	uint32 type;		/* = WLC_RRM_BCN_RPT_RESP (2) */
+	uint32 ver;		/* structure version */
+	uint32 index;		/* Index of AP inclided in the report */
+	uint32 num_aps;		/* total number of APs reported */
+	uint32 measure_mode;	/* Beacon measurement mode */
+	uint32 bssid_lo;	/* BSSID[3:0] */
+	uint32 bssid_hi;	/* BSSID[5:4] */
+	uint32 ssid_match;	/* 0: not-match 1:match */
+	uint32 chanspec;
+	int32  rssi;
+	int32  snr;
+} wl_roam_11kvr_bcn_rpt_resp_v1_t;
+
+#define WLC_RRM_NBR_RPT_REQ_V1	1u
+typedef struct wl_roam_11kvr_nbr_rpt_req_v1 {
+	uint32 type;		/* = WLC_RRM_NBR_RPT_REQ (3) */
+	uint32 ver;		/* structure version */
+	uint32 token;
+} wl_roam_11kvr_nbr_rpt_req_v1_t;
+
+#define WLC_RRM_NBR_RPT_RESP_V1	1u
+typedef struct wl_roam_11kvr_nbr_rpt_resp_v1 {
+	uint32 type;		/* = WLC_RRM_NBR_RPT_RESP (4) */
+	uint32 ver;		/* structure version */
+	uint32 channel_num;
+	uint32 chanspec;
+} wl_roam_11kvr_nbr_rpt_resp_v1_t;
+
+#define WLC_WNM_DMS_REQ_V1	1u
+typedef struct wl_roam_11kvr_dms_req_v1 {
+	uint32 type;		/* = WLC_WNM_DMS_REQ (5) */
+	uint32 ver;		/* structure version */
+	uint32 token;
+} wl_roam_11kvr_dms_req_v1_t;
+
+#define WLC_WNM_DMS_RESP_V1	1u
+typedef struct wl_roam_11kvr_dms_resp_v1 {
+	uint32 type;		/* = WLC_WNM_DMS_RESP (6) */
+	uint32 ver;		/* structure version */
+	uint32 token;
+} wl_roam_11kvr_dms_resp_v1_t;
+
 /* Sub-block type for EVENT_LOG_TAG_AMPDU_DUMP */
 typedef enum {
 	WL_AMPDU_STATS_TYPE_RXMCSx1		= 0,	/* RX MCS rate (Nss = 1) */
@@ -653,9 +759,37 @@ typedef enum {
 	WL_AMPDU_STATS_TYPE_TXHEx1		= 50,	/* TX HE rate (Nss = 1) */
 	WL_AMPDU_STATS_TYPE_TXHEx2		= 51,
 	WL_AMPDU_STATS_TYPE_TXHEx3		= 52,
-	WL_AMPDU_STATS_TYPE_TXHEx4		= 53
+	WL_AMPDU_STATS_TYPE_TXHEx4		= 53,
+
+	WL_AMPDU_STATS_TYPE_RXEHTx1		= 54,	/* RX EHT rate (Nss = 1) */
+	WL_AMPDU_STATS_TYPE_RXEHTx2		= 55,
+	WL_AMPDU_STATS_TYPE_RXEHTx3		= 56,
+	WL_AMPDU_STATS_TYPE_RXEHTx4		= 57,
+	WL_AMPDU_STATS_TYPE_TXEHTx1		= 58,	/* TX EHT rate (Nss = 1) */
+	WL_AMPDU_STATS_TYPE_TXEHTx2		= 59,
+	WL_AMPDU_STATS_TYPE_TXEHTx3		= 60,
+	WL_AMPDU_STATS_TYPE_TXEHTx4		= 61,
+
+	WL_AMPDU_STATS_TYPE_RX_EHT_SUOK		= 62,
+	WL_AMPDU_STATS_TYPE_RX_EHT_SU_DENS	= 63,
+	WL_AMPDU_STATS_TYPE_RX_EHT_MUMIMOOK	= 64,
+	WL_AMPDU_STATS_TYPE_RX_EHT_MUMIMO_DENS	= 65,
+	WL_AMPDU_STATS_TYPE_RX_EHT_DLOFDMA_OK	= 66,
+	WL_AMPDU_STATS_TYPE_RX_EHT_DLOFDMA_DENS	= 67,
+	WL_AMPDU_STATS_TYPE_RX_EHT_DLOFDMA_HIST	= 68,
+
+	WL_AMPDU_STATS_TYPE_TX_EHT_MCSALL	= 69,
+	WL_AMPDU_STATS_TYPE_TX_EHT_MCSOK	= 70,
+	WL_AMPDU_STATS_TYPE_TX_EHT_MUALL	= 71,
+	WL_AMPDU_STATS_TYPE_TX_EHT_MUOK		= 72,
+	WL_AMPDU_STATS_TYPE_TX_EHT_RUBW		= 73,
+	WL_AMPDU_STATS_TYPE_TX_EHT_EHT_PADDING	= 74,
+
+	WL_AMPDU_STATS_TYPE_MLO_LINK_INFO	= 75
 } wl_ampdu_stat_enum_t;
-#define	WL_AMPDU_STATS_MAX_CNTS	(64)	/* Possible max number of counters in any sub-categary */
+
+#define	WL_AMPDU_STATS_MAX_CNTS		64u	/* Max number of counters in any sub-categary */
+#define	WL_AMPDU_STATS_MAX_CNTS_EXT	64u	/* Extended counters */
 
 typedef struct {
 	uint16	type;		/* AMPDU statistics sub-type */
@@ -666,18 +800,22 @@ typedef struct {
 typedef wl_ampdu_stats_generic_t wl_ampdu_stats_rx_t;
 typedef wl_ampdu_stats_generic_t wl_ampdu_stats_tx_t;
 
+#define WL_AMPDU_STATS_AGGRSZ_MAX_SIZE	(sizeof(wl_ampdu_stats_aggrsz_t) + \
+	WL_AMPDU_STATS_MAX_CNTS_EXT * sizeof(uint32))
 typedef struct {
 	uint16	type;		/* AMPDU statistics sub-type */
 	uint16	len;		/* Number of 32-bit counters + 2 */
 	uint32	total_ampdu;
 	uint32	total_mpdu;
+	/* The following must be contiguous arrays */
 	uint32	aggr_dist[WL_AMPDU_STATS_MAX_CNTS + 1];
+	uint32  aggr_dist_ext[];
 } wl_ampdu_stats_aggrsz_t;
 
 /* AMPDU_RX module's per-slice counters. Sent by ecounters as subtype of
  * WL_IFSTATS_XTLV_RX_AMPDU_STATS ecounters type
  */
-#define WLC_AMPDU_RX_STATS_V1	(1u)
+#define WLC_AMPDU_RX_STATS_V1	1u
 typedef struct wlc_ampdu_rx_stats {
 	uint16 version;
 	uint16 len;
@@ -1083,11 +1221,11 @@ typedef struct prsv_periodic_log_hdr {
 	uint16 length;
 } prsv_periodic_log_hdr_t;
 
-#define ROAM_LOG_VER_1	(1u)
-#define ROAM_LOG_VER_2	(2u)
-#define ROAM_LOG_VER_3	(3u)
-#define ROAM_LOG_VER_4	(4u)
-#define ROAM_SSID_LEN	(32u)
+#define ROAM_LOG_VER_1	1u
+#define ROAM_LOG_VER_2	2u
+#define ROAM_LOG_VER_3	3u
+#define ROAM_LOG_VER_4	4u
+#define ROAM_SSID_LEN	32u
 typedef struct roam_log_trig_v1 {
 	prsv_periodic_log_hdr_t hdr;
 	int8 rssi;
@@ -1391,7 +1529,7 @@ typedef struct event_log_buffer {
 	uint8 data[];	/* the payload of interest */
 } event_log_buffer_t;
 
-#define XTLV_EVENT_LOG_BUFFER_LEN		(OFFSETOF(event_log_buffer_t, data))
+#define XTLV_EVENT_LOG_BUFFER_LEN		OFFSETOF(event_log_buffer_t, data)
 #define XTLV_EVENT_LOG_BUFFER_FULL_LEN(buf_len)	ALIGN_SIZE((XTLV_EVENT_LOG_BUFFER_LEN + \
 							(buf_len) * sizeof(uint8)), sizeof(uint32))
 
@@ -1432,7 +1570,7 @@ typedef struct event_log_rte_dvfs_fsm_struct {
 } event_log_rte_dvfs_fsm_struct_t;
 
 /* Slotted BSS timer reference for RX deafness debug */
-#define WLC_SLOTTED_BSS_TIMEREF_VERSION_1	(1u)
+#define WLC_SLOTTED_BSS_TIMEREF_VERSION_1	1u
 typedef struct wlc_slotted_bss_timeref_v1 {
 	uint16 version;
 	uint8 wlc_unit;	/* WLC unit that triggered generation of this timestamp */
@@ -1456,7 +1594,7 @@ typedef struct wlc_slotted_bss_timeref_v2 {
 	wlc_slotted_bss_timeref_values_v1_t timerefs[];
 } wlc_slotted_bss_timeref_v2_t;
 
-#define	TRIG_LOG_EVENTS_XTLV_CONTAINER_VERSION_1	(1u)
+#define	TRIG_LOG_EVENTS_XTLV_CONTAINER_VERSION_1	1u
 typedef struct trig_log_events_xtlv_container {
 	uint16	version;	/**< see definition of TRIG_LOG_EVENTS_XTLV_CONTAINER_VERSION */
 	uint16	len;		/**< length of data including all paddings. */
@@ -1468,7 +1606,7 @@ typedef struct trig_log_events_xtlv_container {
 } trig_log_events_xtlv_container_v1_t;
 
 /* Bus device HTOD RX dump info. Sent in triggered log events container above */
-#define PCIEDEV_HTOD_RX_INFO_VERSION_1		(1u)
+#define PCIEDEV_HTOD_RX_INFO_VERSION_1			1u
 typedef struct pciedev_htod_rx_ring_info_v1 {
 	uint16 version;
 	uint16 g_rxcplist_max;
@@ -1481,10 +1619,12 @@ typedef struct pciedev_htod_rx_ring_info_v1 {
 	uint16 htod_rx_buf_pool_item_cnt;
 	uint16 htod_rx_buf_pool_availcnt;
 	uint16 htod_rx_buf_pool_pend_item_cnt;
+	uint16 htod_rx_inuse_pool_r_ptr;
+	uint16 htod_rx_inuse_pool_w_ptr;
 } pciedev_htod_rx_ring_info_v1_t;
 
 /* WL RX fifo overflow info. Sent in triggered log events container above */
-#define WLC_RX_FIFO_DMA_NUM				(3u)
+#define WLC_RX_FIFO_DMA_NUM				3u
 typedef struct wlc_rx_fifo_overflow_info_v1 {
 	uint8 unit;
 	uint8 rxfifo_bitmap;
@@ -1518,28 +1658,35 @@ typedef struct wlc_rx_fifo_overflow_info_v1 {
 	uint64 rx_dma_posts_success_time[WLC_RX_FIFO_DMA_NUM];	/* in ns */
 
 	uint32 rx_dma_desc_count[WLC_RX_FIFO_DMA_NUM];
+	uint64 rx_sample_ts; /* Time in ns when sample taken */
 } wlc_rx_fifo_overflow_info_v1_t;
 
 /* Data structures for transferring channel switch histogram data to host */
 
-#define CHSW_HISTOGRAM_HOST_ENTRY_VERSION_1 (1u)
+#define CHSW_HISTOGRAM_HOST_ENTRY_VERSION_1 1u
 
 typedef struct chsw_histogram_host_entry_v1 {
 	uint8 version;
 	uint8 PAD[3];
 	chanspec_t from_chanspec;
 	chanspec_t to_chanspec;
-	uint32 buckets[BCM_FLEX_ARRAY];
+	uint32 buckets[];
 } chsw_histogram_host_entry_v1_t;
 
-#define CHSW_HISTOGRAM_HOST_DATA_VERSION_1 (1u)
+#define CHSW_HISTOGRAM_HOST_DATA_VERSION_1 1u
 
 typedef struct chsw_histogram_host_data_v1 {
 	uint8 version;
 	uint8 num_host_entries; /* Number of host entries */
 	uint8 num_buckets; /* Number of buckets in each host entry */
-	uint8 PAD;
-	chsw_histogram_host_entry_v1_t host_entries[BCM_FLEX_ARRAY];
+	uint8 PAD; /* Keep everything aligned */
+	uint32 host_entries[];	/* chsw_histogram_host_entry_v1_t's go here.
+				 * There are num_host_entries of these.
+				 * uint32 is used because the structures themselves
+				 * are variable length, so defining this with strong
+				 * typing is impossible due to nested variable
+				 * length structures.
+				 */
 } chsw_histogram_host_data_v1_t;
 
 #endif /* _EVENT_LOG_PAYLOAD_H_ */

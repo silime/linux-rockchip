@@ -374,13 +374,13 @@
 	// 	pinctrl-0 = <&vcc5v0_otg_en>;
 	// 	vin-supply = <&vcc5v0_sys>;
 	// };
+
 	wireless_wlan: wireless-wlan {
-		compatible = "wlan-platdata";
-		wifi_chip_type = "ap6398sv";
+		compatible = "android,bcmdhd_wlan";
 		pinctrl-names = "default";
-		pinctrl-0 = <&wifi_host_wake_irq>;
-		WIFI,host_wake_irq = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
-		WIFI,poweren_gpio = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
+		pinctrl-0 = <&wifi_host_wake_irq>, <&wifi_poweren_gpio>;
+		gpio_wl_reg_on = <&gpio0 RK_PC4 GPIO_ACTIVE_HIGH>;
+		gpio_wl_host_wake = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
 };
@@ -1308,6 +1308,8 @@
 };
 
 &sdio {
+	#address-cells = <1>;
+	#size-cells = <0>;
 	max-frequency = <150000000>;
 	no-sd;
 	no-mmc;
@@ -1322,13 +1324,17 @@
 	pinctrl-0 = <&sdiom0_pins>;
 	sd-uhs-sdr104;
 	status = "okay";
-	//  brcmf: wifi@1 {
-	// 	 compatible = "brcm,bcm4329-fmac";
-	// 	 reg = <1>;
-	// 	 interrupt-parent = <&gpio0>;
-	// 	 interrupts = <RK_PB7 IRQ_TYPE_LEVEL_HIGH>;
-	// 	 pinctrl-names = "default";
-	//  };
+
+	// brcmf: wifi@1 {
+	// 	compatible = "brcm,bcm4329-fmac";
+	// 	reg = <1>;
+	// 	/* vendor=0x02d0 product=0xaae7 chip=0xaae8 rev=2 socitype=1 */
+	// 	interrupt-parent = <&gpio0>;
+	// 	interrupts = <RK_PB7 IRQ_TYPE_LEVEL_HIGH>;
+	// 	interrupt-names = "host-wake";
+	// 	pinctrl-names = "default";
+	// 	pinctrl-0 = <&wifi_host_wake_irq>;
+	// };
 };
 
 &sdmmc {
@@ -1354,8 +1360,6 @@
 
 &uart9 {
 	pinctrl-0 = <&uart9m0_xfer>, <&uart9m0_ctsn>, <&uart9m0_rtsn>;
-	/delete-property/ dma-names;
-	/delete-property/ dmas;
 	uart-has-rtscts;
 	status = "okay";
 	

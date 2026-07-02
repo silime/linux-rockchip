@@ -2,7 +2,26 @@
  * OS Abstraction Layer Extension - the APIs defined by the "extension" API
  * are only supported by a subset of all operating systems.
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -708,46 +727,46 @@ void osl_ext_interrupt_restore(osl_ext_interrupt_state_t state);
 /* ---- Variable Externs ------------------------------------------------- */
 /* ---- Function Prototypes ---------------------------------------------- */
 
-#define osl_ext_sem_create(name, init_cnt, sem)		(OSL_EXT_SUCCESS)
-#define osl_ext_sem_delete(sem)				(OSL_EXT_SUCCESS)
-#define osl_ext_sem_give(sem)				(OSL_EXT_SUCCESS)
-#define osl_ext_sem_take(sem, timeout_msec)		(OSL_EXT_SUCCESS)
+#define osl_ext_sem_create(name, init_cnt, sem)		OSL_EXT_SUCCESS
+#define osl_ext_sem_delete(sem)				OSL_EXT_SUCCESS
+#define osl_ext_sem_give(sem)				OSL_EXT_SUCCESS
+#define osl_ext_sem_take(sem, timeout_msec)		OSL_EXT_SUCCESS
 
-#define osl_ext_mutex_create(name, mutex)		(OSL_EXT_SUCCESS)
-#define osl_ext_mutex_delete(mutex)			(OSL_EXT_SUCCESS)
-#define osl_ext_mutex_acquire(mutex, timeout_msec)	(OSL_EXT_SUCCESS)
-#define osl_ext_mutex_release(mutex)			(OSL_EXT_SUCCESS)
+#define osl_ext_mutex_create(name, mutex)		OSL_EXT_SUCCESS
+#define osl_ext_mutex_delete(mutex)			OSL_EXT_SUCCESS
+#define osl_ext_mutex_acquire(mutex, timeout_msec)	OSL_EXT_SUCCESS
+#define osl_ext_mutex_release(mutex)			OSL_EXT_SUCCESS
 
 #define osl_ext_timer_create(name, timeout_msec, mode, func, arg, timer) \
-	(OSL_EXT_SUCCESS)
-#define osl_ext_timer_delete(timer)			(OSL_EXT_SUCCESS)
-#define osl_ext_timer_start(timer, timeout_msec, mode)	(OSL_EXT_SUCCESS)
-#define osl_ext_timer_stop(timer)			(OSL_EXT_SUCCESS)
-#define osl_ext_time_get()				(0)
+	OSL_EXT_SUCCESS
+#define osl_ext_timer_delete(timer)			OSL_EXT_SUCCESS
+#define osl_ext_timer_start(timer, timeout_msec, mode)	OSL_EXT_SUCCESS
+#define osl_ext_timer_stop(timer)			OSL_EXT_SUCCESS
+#define osl_ext_time_get()				0
 
 #define osl_ext_task_create(name, stack, stack_size, priority, func, arg, task) \
-	(OSL_EXT_SUCCESS)
-#define osl_ext_task_delete(task)			(OSL_EXT_SUCCESS)
-#define osl_ext_task_current()				(NULL)
-#define osl_ext_task_yield()				(OSL_EXT_SUCCESS)
-#define osl_ext_task_enable_stack_check()		(OSL_EXT_SUCCESS)
+	OSL_EXT_SUCCESS
+#define osl_ext_task_delete(task)			OSL_EXT_SUCCESS
+#define osl_ext_task_current()				NULL
+#define osl_ext_task_yield()				OSL_EXT_SUCCESS
+#define osl_ext_task_enable_stack_check()		OSL_EXT_SUCCESS
 
 #define osl_ext_queue_create(name, queue_buffer, queue_size, queue) \
-	(OSL_EXT_SUCCESS)
-#define osl_ext_queue_delete(queue)			(OSL_EXT_SUCCESS)
-#define osl_ext_queue_send(queue, data)			(OSL_EXT_SUCCESS)
-#define osl_ext_queue_send_synchronous(queue, data)	(OSL_EXT_SUCCESS)
+	OSL_EXT_SUCCESS
+#define osl_ext_queue_delete(queue)			OSL_EXT_SUCCESS
+#define osl_ext_queue_send(queue, data)			OSL_EXT_SUCCESS
+#define osl_ext_queue_send_synchronous(queue, data)	OSL_EXT_SUCCESS
 #define osl_ext_queue_receive(queue, timeout_msec, data) \
-	(OSL_EXT_SUCCESS)
-#define osl_ext_queue_count(queue, count)		(OSL_EXT_SUCCESS)
+	OSL_EXT_SUCCESS
+#define osl_ext_queue_count(queue, count)		OSL_EXT_SUCCESS
 
-#define osl_ext_event_create(name, event)		(OSL_EXT_SUCCESS)
-#define osl_ext_event_delete(event)			(OSL_EXT_SUCCESS)
+#define osl_ext_event_create(name, event)		OSL_EXT_SUCCESS
+#define osl_ext_event_delete(event)			OSL_EXT_SUCCESS
 #define osl_ext_event_get(event, requested, timeout_msec, event_bits) \
-	(OSL_EXT_SUCCESS)
-#define osl_ext_event_set(event, event_bits)		(OSL_EXT_SUCCESS)
+	OSL_EXT_SUCCESS
+#define osl_ext_event_set(event, event_bits)		OSL_EXT_SUCCESS
 
-#define osl_ext_interrupt_disable(void)			(0)
+#define osl_ext_interrupt_disable(void)			0
 #define osl_ext_interrupt_restore(state)
 
 #endif	/* OSL_EXT_DISABLED */

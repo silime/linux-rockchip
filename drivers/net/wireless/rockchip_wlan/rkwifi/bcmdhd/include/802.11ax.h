@@ -2,7 +2,26 @@
  * Basic types and constants relating to 802.11ax/HE STA
  * This is a portion of 802.11ax definition. The rest are in 802.11.h.
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -34,7 +53,7 @@
 
 /* HT Control Field: (Table 9-9a) */
 #define HTC_HE_VARIANT		0x03u
-#define HTC_HEVAR_SHIFT		0	/* HE VARIANT shift */
+#define HTC_HEVAR_SHIFT		0u	/* HE VARIANT shift */
 #define HTC_HEVAR(htc)		(((htc) & HTC_HE_VARIANT) >> HTC_HEVAR_SHIFT)
 
 /* HT Control IDs: (Table 9-18a & Table 9-9a) */
@@ -87,10 +106,10 @@
 #define HE_OMI_ULMU_DATA_DIS_MASK	0x800u
 
 /* OM-Control Channel Width Subfield definition, as per 9.2.4.6a.2 OM Control */
-#define OMI_CHW_20MHZ			0
-#define OMI_CHW_40MHZ			1
-#define OMI_CHW_80MHZ			2
-#define OMI_CHW_160MHZ_80P80MHZ		3
+#define OMI_CHW_20MHZ			0u
+#define OMI_CHW_40MHZ			1u
+#define OMI_CHW_80MHZ			2u
+#define OMI_CHW_160MHZ_80P80MHZ		3u
 
 /* Table 9-18d ACI Bitmap subfield encoding */
 #define HE_BSR_ACI_MAP_BE		0u
@@ -99,12 +118,12 @@
 #define HE_BSR_ACI_MAP_VO		3u
 
 /* GI And LTF Type subfield encoding (Table 9-31d) */
-#define HE_LTF_1_GI_1_6us	(0u)
-#define HE_LTF_2_GI_1_6us	(1u)
-#define HE_LTF_4_GI_3_2us	(2u)
+#define HE_LTF_1_GI_1_6us	0u
+#define HE_LTF_2_GI_1_6us	1u
+#define HE_LTF_4_GI_3_2us	2u
 
 /* special STA-IDs (Section 27.11.1) */
-#define HE_STAID_BSS_BCAST		0
+#define HE_STAID_BSS_BCAST		0u
 #define HE_STAID_UNASSOCIATED_STA	2045u
 #define HE_STAID_NO_USER		2046u
 #define HE_STAID_MBSS_BCAST		2047u
@@ -120,79 +139,79 @@
 typedef uint8 he_mac_cap_t[HE_MAC_CAP_INFO_SIZE];
 
 /* bit position and field width */
-#define HE_MAC_HTC_HE_SUPPORT_IDX		0	/* HTC HE Support */
-#define HE_MAC_HTC_HE_SUPPORT_FSZ		1
-#define HE_MAC_TWT_REQ_SUPPORT_IDX		1	/* TWT Requestor Support */
-#define HE_MAC_TWT_REQ_SUPPORT_FSZ		1
-#define HE_MAC_TWT_RESP_SUPPORT_IDX		2	/* TWT Responder Support */
-#define HE_MAC_TWT_RESP_SUPPORT_FSZ		1
-#define HE_MAC_FRAG_SUPPORT_IDX			3	/* Fragmentation Support */
-#define HE_MAC_FRAG_SUPPORT_FSZ			2
-#define HE_MAC_MAX_MSDU_FRAGS_IDX		5	/* Max. Fragmented MSDUs */
-#define HE_MAC_MAX_MSDU_FRAGS_FSZ		3
-#define HE_MAC_MIN_FRAG_SIZE_IDX		8	/* Min. Fragment Size */
-#define HE_MAC_MIN_FRAG_SIZE_FSZ		2
-#define HE_MAC_TRIG_MAC_PAD_DUR_IDX		10	/* Trigger Frame MAC Pad Dur */
-#define HE_MAC_TRIG_MAC_PAD_DUR_FSZ		2
-#define HE_MAC_MULTI_TID_AGG_RX_IDX		12	/* Multi TID Agg. Rx support */
-#define HE_MAC_MULTI_TID_AGG_RX_FSZ		3
-#define HE_MAC_LINK_ADAPT_IDX			15	/* HE Link Adaptation Support */
-#define HE_MAC_LINK_ADAPT_FSZ			2
-#define HE_MAC_ALL_ACK_SUPPORT_IDX		17	/* All Ack Support */
-#define HE_MAC_ALL_ACK_SUPPORT_FSZ		1
-#define HE_MAC_TRS_SUPPORT_IDX			18	/* TRS Support */
-#define HE_MAC_TRS_SUPPORT_FSZ			1
-#define HE_MAC_BSR_SUPPORT_IDX			19	/* BSR Support */
-#define HE_MAC_BSR_SUPPORT_FSZ			1
-#define HE_MAC_BCAST_TWT_SUPPORT_IDX		20	/* Broadcast TWT Support */
-#define HE_MAC_BCAST_TWT_SUPPORT_FSZ		1
-#define HE_MAC_32BA_BITMAP_SUPPORT_IDX		21	/* 32-bit BA Bitmap Support */
-#define HE_MAC_32BA_BITMAP_SUPPORT_FSZ		1
-#define HE_MAC_MU_CASCADE_SUPPORT_IDX		22	/* MU Cascade Support */
-#define HE_MAC_MU_CASCADE_SUPPORT_FSZ		1
-#define HE_MAC_ACK_ENAB_AGG_SUPPORT_IDX		23	/* Ack Enabled Agg. Support */
-#define HE_MAC_ACK_ENAB_AGG_SUPPORT_FSZ		1
+#define HE_MAC_HTC_HE_SUPPORT_IDX		0u	/* HTC HE Support */
+#define HE_MAC_HTC_HE_SUPPORT_FSZ		1u
+#define HE_MAC_TWT_REQ_SUPPORT_IDX		1u	/* TWT Requestor Support */
+#define HE_MAC_TWT_REQ_SUPPORT_FSZ		1u
+#define HE_MAC_TWT_RESP_SUPPORT_IDX		2u	/* TWT Responder Support */
+#define HE_MAC_TWT_RESP_SUPPORT_FSZ		1u
+#define HE_MAC_FRAG_SUPPORT_IDX			3u	/* Fragmentation Support */
+#define HE_MAC_FRAG_SUPPORT_FSZ			2u
+#define HE_MAC_MAX_MSDU_FRAGS_IDX		5u	/* Max. Fragmented MSDUs */
+#define HE_MAC_MAX_MSDU_FRAGS_FSZ		3u
+#define HE_MAC_MIN_FRAG_SIZE_IDX		8u	/* Min. Fragment Size */
+#define HE_MAC_MIN_FRAG_SIZE_FSZ		2u
+#define HE_MAC_TRIG_MAC_PAD_DUR_IDX		10u	/* Trigger Frame MAC Pad Dur */
+#define HE_MAC_TRIG_MAC_PAD_DUR_FSZ		2u
+#define HE_MAC_MULTI_TID_AGG_RX_IDX		12u	/* Multi TID Agg. Rx support */
+#define HE_MAC_MULTI_TID_AGG_RX_FSZ		3u
+#define HE_MAC_LINK_ADAPT_IDX			15u	/* HE Link Adaptation Support */
+#define HE_MAC_LINK_ADAPT_FSZ			2u
+#define HE_MAC_ALL_ACK_SUPPORT_IDX		17u	/* All Ack Support */
+#define HE_MAC_ALL_ACK_SUPPORT_FSZ		1u
+#define HE_MAC_TRS_SUPPORT_IDX			18u	/* TRS Support */
+#define HE_MAC_TRS_SUPPORT_FSZ			1u
+#define HE_MAC_BSR_SUPPORT_IDX			19u	/* BSR Support */
+#define HE_MAC_BSR_SUPPORT_FSZ			1u
+#define HE_MAC_BCAST_TWT_SUPPORT_IDX		20u	/* Broadcast TWT Support */
+#define HE_MAC_BCAST_TWT_SUPPORT_FSZ		1u
+#define HE_MAC_32BA_BITMAP_SUPPORT_IDX		21u	/* 32-bit BA Bitmap Support */
+#define HE_MAC_32BA_BITMAP_SUPPORT_FSZ		1u
+#define HE_MAC_MU_CASCADE_SUPPORT_IDX		22u	/* MU Cascade Support */
+#define HE_MAC_MU_CASCADE_SUPPORT_FSZ		1u
+#define HE_MAC_ACK_ENAB_AGG_SUPPORT_IDX		23u	/* Ack Enabled Agg. Support */
+#define HE_MAC_ACK_ENAB_AGG_SUPPORT_FSZ		1u
 /* bit 24 - Reserved */
-#define HE_MAC_OMI_CONTROL_SUPPORT_IDX		25	/* OMI Control Support */
-#define HE_MAC_OMI_CONTROL_SUPPORT_FSZ		1
-#define HE_MAC_OFDMA_RA_SUPPORT_IDX		26	/* OFDMA RA Support */
-#define HE_MAC_OFDMA_RA_SUPPORT_FSZ		1
-#define HE_MAC_MAX_AMPDU_LEN_EXP_IDX		27	/* Max AMPDU Length Exponent */
-#define HE_MAC_MAX_AMPDU_LEN_EXP_FSZ		2
-#define HE_MAC_AMSDU_FRAG_SUPPORT_IDX		29	/* AMSDU Fragementation Support */
-#define HE_MAC_AMSDU_FRAG_SUPPORT_FSZ		1
-#define HE_MAC_FLEX_TWT_SCHEDULE_IDX		30	/* Flexible TWT Schedule Support */
-#define HE_MAC_FLEX_TWT_SCHEDULE_FSZ		1
-#define HE_MAC_RX_MBSS_CTL_FRAME_IDX		31	/* Rx control frames to Multi BSS */
-#define HE_MAC_RX_MBSS_CTL_FRAME_FSZ		1
-#define HE_MAC_RX_AGG_BSRP_BQRP_IDX		32	/* Aggregated BSRP BQRP Rx */
-#define HE_MAC_RX_AGG_BSRP_BQRP_FSZ		1
-#define HE_MAC_QTP_SUPPORT_IDX			33	/* Support Quiet time period */
-#define HE_MAC_QTP_SUPPORT_FSZ			1
-#define HE_MAC_BQR_SUPPORT_IDX			34	/* Support BQR */
-#define HE_MAC_BQR_SUPPORT_FSZ			1
-#define HE_MAC_SRP_RESPONDER_IDX		35	/* SRP responder Support */
-#define HE_MAC_SRP_RESPONDER_FSZ		1
-#define HE_MAC_NDP_FDBK_SUPPORT_IDX		36	/* NDP feedback report Support */
-#define HE_MAC_NDP_FDBK_SUPPORT_FSZ		1
-#define HE_MAC_OPS_SUPPORT_IDX			37	/* OPS support */
-#define HE_MAC_OPS_SUPPORT_FSZ			1
-#define HE_MAC_AMSDU_IN_AMPDU_IDX		38	/* AMSDU in AMPDU support */
-#define HE_MAC_AMSDU_IN_AMPDU_FSZ		1
-#define HE_MAC_MULTI_TID_AGG_TX_IDX		39	/* Multi TID Agg. Tx support */
-#define HE_MAC_MULTI_TID_AGG_TX_FSZ		3
-#define HE_MAC_SST_SUPPORT_IDX			42	/* Sub-channel Selective channel */
-#define HE_MAC_SST_SUPPORT_FSZ			1
-#define HE_MAC_UL_2X_996_TONE_RU_SUPP_IDX	43	/* UL 2X 996 tone RU Support */
-#define HE_MAC_UL_2X_996_TONE_RU_SUPP_FSZ	1
-#define HE_MAC_UL_MU_DATA_DISABLE_RX_IDX	44	/* OM - UL MU Data Disable RX */
-#define HE_MAC_UL_MU_DATA_DISABLE_RX_FSZ	1
-#define HE_MAC_DYNAMIC_SM_PWR_SAVE_IDX		45	/* HE Dynamic SM Power Save */
-#define HE_MAC_DYNAMIC_SM_PWR_SAVE_FSZ		1
-#define HE_MAC_PUNCT_SOUNDING_SUPP_IDX		46	/* Punctured Sounding Support */
-#define HE_MAC_PUNCT_SOUNDING_SUPP_FSZ		1
-#define HE_MAC_HT_VHT_TRIG_FRAME_RX_IDX		47	/* HT And VHT Trigger Frame RX Support */
-#define HE_MAC_HT_VHT_TRIG_FRAME_RX_FSZ		1
+#define HE_MAC_OMI_CONTROL_SUPPORT_IDX		25u	/* OMI Control Support */
+#define HE_MAC_OMI_CONTROL_SUPPORT_FSZ		1u
+#define HE_MAC_OFDMA_RA_SUPPORT_IDX		26u	/* OFDMA RA Support */
+#define HE_MAC_OFDMA_RA_SUPPORT_FSZ		1u
+#define HE_MAC_MAX_AMPDU_LEN_EXP_IDX		27u	/* Max AMPDU Length Exponent */
+#define HE_MAC_MAX_AMPDU_LEN_EXP_FSZ		2u
+#define HE_MAC_AMSDU_FRAG_SUPPORT_IDX		29u	/* AMSDU Fragementation Support */
+#define HE_MAC_AMSDU_FRAG_SUPPORT_FSZ		1u
+#define HE_MAC_FLEX_TWT_SCHEDULE_IDX		30u	/* Flexible TWT Schedule Support */
+#define HE_MAC_FLEX_TWT_SCHEDULE_FSZ		1u
+#define HE_MAC_RX_MBSS_CTL_FRAME_IDX		31u	/* Rx control frames to Multi BSS */
+#define HE_MAC_RX_MBSS_CTL_FRAME_FSZ		1u
+#define HE_MAC_RX_AGG_BSRP_BQRP_IDX		32u	/* Aggregated BSRP BQRP Rx */
+#define HE_MAC_RX_AGG_BSRP_BQRP_FSZ		1u
+#define HE_MAC_QTP_SUPPORT_IDX			33u	/* Support Quiet time period */
+#define HE_MAC_QTP_SUPPORT_FSZ			1u
+#define HE_MAC_BQR_SUPPORT_IDX			34u	/* Support BQR */
+#define HE_MAC_BQR_SUPPORT_FSZ			1u
+#define HE_MAC_SRP_RESPONDER_IDX		35u	/* SRP responder Support */
+#define HE_MAC_SRP_RESPONDER_FSZ		1u
+#define HE_MAC_NDP_FDBK_SUPPORT_IDX		36u	/* NDP feedback report Support */
+#define HE_MAC_NDP_FDBK_SUPPORT_FSZ		1u
+#define HE_MAC_OPS_SUPPORT_IDX			37u	/* OPS support */
+#define HE_MAC_OPS_SUPPORT_FSZ			1u
+#define HE_MAC_AMSDU_IN_AMPDU_IDX		38u	/* AMSDU in AMPDU support */
+#define HE_MAC_AMSDU_IN_AMPDU_FSZ		1u
+#define HE_MAC_MULTI_TID_AGG_TX_IDX		39u	/* Multi TID Agg. Tx support */
+#define HE_MAC_MULTI_TID_AGG_TX_FSZ		3u
+#define HE_MAC_SST_SUPPORT_IDX			42u	/* Sub-channel Selective channel */
+#define HE_MAC_SST_SUPPORT_FSZ			1u
+#define HE_MAC_UL_2X_996_TONE_RU_SUPP_IDX	43u	/* UL 2X 996 tone RU Support */
+#define HE_MAC_UL_2X_996_TONE_RU_SUPP_FSZ	1u
+#define HE_MAC_UL_MU_DATA_DISABLE_RX_IDX	44u	/* OM - UL MU Data Disable RX */
+#define HE_MAC_UL_MU_DATA_DISABLE_RX_FSZ	1u
+#define HE_MAC_DYNAMIC_SM_PWR_SAVE_IDX		45u	/* HE Dynamic SM Power Save */
+#define HE_MAC_DYNAMIC_SM_PWR_SAVE_FSZ		1u
+#define HE_MAC_PUNCT_SOUNDING_SUPP_IDX		46u	/* Punctured Sounding Support */
+#define HE_MAC_PUNCT_SOUNDING_SUPP_FSZ		1u
+#define HE_MAC_HT_VHT_TRIG_FRAME_RX_IDX		47u	/* HT And VHT Trigger Frame RX Support */
+#define HE_MAC_HT_VHT_TRIG_FRAME_RX_FSZ		1u
 
 /* HE PHY Capabilities Information field (figure 9-589cl) */
 #define HE_PHY_CAP_INFO_SIZE			11u
@@ -200,224 +219,225 @@ typedef uint8 he_phy_cap_t[HE_PHY_CAP_INFO_SIZE];
 
 /* bit position and field width */
 /* bit 0 - Reserved */
-#define HE_PHY_CH_WIDTH_SET_IDX			1	/* Channel Width Set */
-#define HE_PHY_CH_WIDTH_SET_FSZ			7
-#define HE_PHY_PUNCT_PREAMBLE_RX_IDX		8	/* Punctured Preamble Rx */
-#define HE_PHY_PUNCT_PREAMBLE_RX_FSZ		4
-#define HE_PHY_DEVICE_CLASS_IDX			12	/* Device Class */
-#define HE_PHY_DEVICE_CLASS_FSZ			1
-#define HE_PHY_LDPC_PYLD_IDX			13	/* LDPC Coding In Payload */
-#define HE_PHY_LDPC_PYLD_FSZ			1
-#define HE_PHY_SU_PPDU_1x_LTF_0_8_GI_IDX	14	/* SU PPDU 1x LTF GI 0.8 us */
-#define HE_PHY_SU_PPDU_1x_LTF_0_8_GI_FSZ	1
-#define HE_PHY_MIDAMBLE_MAX_NSTS_IDX		15	/* Midamble Tx/Rx Max NSTS */
-#define HE_PHY_MIDAMBLE_MAX_NSTS_FSZ		2
-#define HE_PHY_NDP_4x_LTF_3_2_GI_IDX		17	/* NDP with 4xLTF 3.2us GI */
-#define HE_PHY_NDP_4x_LTF_3_2_GI_FSZ		1
-#define HE_PHY_STBC_TX_IDX			18	/* STBC Tx for <= 80 MHz */
-#define HE_PHY_STBC_TX_FSZ			1
-#define HE_PHY_STBC_RX_IDX			19	/* STBC Rx for <= 80 MHz */
-#define HE_PHY_STBC_RX_FSZ			1
-#define HE_PHY_DOPPLER_TX_IDX			20	/* Doppler Tx */
-#define HE_PHY_DOPPLER_TX_FSZ			1
-#define HE_PHY_DOPPLER_RX_IDX			21	/* Doppler Rx */
-#define HE_PHY_DOPPLER_RX_FSZ			1
-#define HE_PHY_FULL_BW_UL_MU_MIMO_IDX		22	/* Full bandwidth UL MU MIMO */
-#define HE_PHY_FULL_BW_UL_MU_MIMO_FSZ		1
-#define HE_PHY_PART_BW_UL_MU_MIMO_IDX		23	/* Partial bandwidth UL MU MIMO */
-#define HE_PHY_PART_BW_UL_MU_MIMO_FSZ		1
-#define HE_PHY_DCM_MAX_CONST_TX_IDX		24	/* DCM Max Constellation Tx */
-#define HE_PHY_DCM_MAX_CONST_TX_FSZ		2
-#define HE_PHY_DCM_MAX_NSS_TX_IDX		26	/* DCM Max NSS Tx */
-#define HE_PHY_DCM_MAX_NSS_TX_FSZ		1
-#define HE_PHY_DCM_MAX_CONST_RX_IDX		27	/* DCM Max Constellation Rx */
-#define HE_PHY_DCM_MAX_CONST_RX_FSZ		2
-#define HE_PHY_DCM_MAX_NSS_RX_IDX		29	/* DCM Max NSS Rx */
-#define HE_PHY_DCM_MAX_NSS_RX_FSZ		1
-#define HE_PHY_RX_MU_PPDU_IDX			30	/* Rx HE MU PPDU From nonAP STA */
-#define HE_PHY_RX_MU_PPDU_FSZ			1
-#define HE_PHY_SU_BEAMFORMER_IDX		31	/* SU Beamformer */
-#define HE_PHY_SU_BEAMFORMER_FSZ		1
-#define HE_PHY_SU_BEAMFORMEE_IDX		32	/* SU Beamformee */
-#define HE_PHY_SU_BEAMFORMEE_FSZ		1
-#define HE_PHY_MU_BEAMFORMER_IDX		33	/* MU Beamformer */
-#define HE_PHY_MU_BEAMFORMER_FSZ		1
-#define HE_PHY_BEAMFORMEE_STS_BELOW80MHZ_IDX	34	/* Beamformee STS For <= 80MHz */
-#define HE_PHY_BEAMFORMEE_STS_BELOW80MHZ_FSZ	3
-#define HE_PHY_BEAMFORMEE_STS_ABOVE80MHZ_IDX	37	/* Beamformee STS For >80 MHz */
-#define HE_PHY_BEAMFORMEE_STS_ABOVE80MHZ_FSZ	3
-#define HE_PHY_SOUND_DIM_BELOW80MHZ_IDX		40	/* Num. Sounding Dim.<= 80 MHz */
-#define HE_PHY_SOUND_DIM_BELOW80MHZ_FSZ		3
-#define HE_PHY_SOUND_DIM_ABOVE80MHZ_IDX		43	/* Num. Sounding Dim.> 80 MHz */
-#define HE_PHY_SOUND_DIM_ABOVE80MHZ_FSZ		3
-#define HE_PHY_SU_FEEDBACK_NG16_SUPPORT_IDX	46	/* Ng=16 For SU Feedback */
-#define HE_PHY_SU_FEEDBACK_NG16_SUPPORT_FSZ	1
-#define HE_PHY_MU_FEEDBACK_NG16_SUPPORT_IDX	47	/* Ng=16 For MU Feedback */
-#define HE_PHY_MU_FEEDBACK_NG16_SUPPORT_FSZ	1
-#define HE_PHY_SU_CODEBOOK_SUPPORT_IDX		48	/* Codebook Sz {4, 2} For SU */
-#define HE_PHY_SU_CODEBOOK_SUPPORT_FSZ		1
-#define HE_PHY_MU_CODEBOOK_SUPPORT_IDX		49	/* Codebook Size {7, 5} For MU */
-#define HE_PHY_MU_CODEBOOK_SUPPORT_FSZ		1
-#define HE_PHY_TRG_SU_BFM_FEEDBACK_IDX		50	/* Triggered SU TXBF Feedback */
-#define HE_PHY_TRG_SU_BFM_FEEDBACK_FSZ		1
-#define HE_PHY_TRG_MU_BFM_FEEDBACK_IDX		51	/* Triggered MU TXBF partial BW Feedback */
-#define HE_PHY_TRG_MU_BFM_FEEDBACK_FSZ		1
-#define HE_PHY_TRG_CQI_FEEDBACK_IDX		52	/* Triggered CQI Feedback */
-#define HE_PHY_TRG_CQI_FEEDBACK_FSZ		1
-#define HE_PHY_PART_BW_EXT_RANGE_IDX		53	/* Partial BW Extended Range */
-#define HE_PHY_PART_BW_EXT_RANGE_FSZ		1
-#define HE_PHY_DL_MU_MIMO_PART_BW_IDX		54	/* Partial Bandwidth DL MU MIMO */
-#define HE_PHY_DL_MU_MIMO_PART_BW_FSZ		1
-#define HE_PHY_PPE_THRESH_PRESENT_IDX		55	/* PPE Threshold Present */
-#define HE_PHY_PPE_THRESH_PRESENT_FSZ		1
-#define HE_PHY_SRP_SR_SUPPORT_IDX		56	/* SRP based SR Support */
-#define HE_PHY_SRP_SR_SUPPORT_FSZ		1
-#define HE_PHY_POWER_BOOST_FACTOR_IDX		57	/* Power Boost Factor Support */
-#define HE_PHY_POWER_BOOST_FACTOR_FSZ		1
-#define HE_PHY_4X_LTF_0_8_GI_SUPPORT_IDX	58	/* HE SU PPDU And HE MU PPDU with
-							* 4x HE-LTF And 0.8 us GI
-							*/
-#define HE_PHY_4X_LTF_0_8_GI_SUPPORT_FSZ	1
-#define HE_PHY_MAX_NC_IDX			59	/* Maximum NC */
-#define HE_PHY_MAX_NC_FSZ			3
-#define HE_PHY_STBC_TX_ABOVE_80_IDX		62	/* STBC Tx above 80 MHz */
-#define HE_PHY_STBC_TX_ABOVE_80_FSZ		1
-#define HE_PHY_STBC_RX_ABOVE_80_IDX		63	/* STBC Rx above 80 MHz */
-#define HE_PHY_STBC_RX_ABOVE_80_FSZ		1
-#define HE_PHY_ER_SU_4X_LTF_0_8_GI_IDX		64	/* ER SU PPDU 4x HE-LTF 0.8 GI */
-#define HE_PHY_ER_SU_4X_LTF_0_8_GI_FSZ		1
-#define HE_PHY_20_IN_40_2G_IDX			65	/* 20 in 40 MHz HE PPDU in 2G */
-#define HE_PHY_20_IN_40_2G_FSZ			1
-#define HE_PHY_20_IN_160_80P80_IDX		66	/* 20 in 160/80+80 MHz HE PPDU */
-#define HE_PHY_20_IN_160_80P80_FSZ		1
-#define HE_PHY_80_IN_160_80P80_IDX		67	/* 80 in 160/80+80 MHz HE PPDU */
-#define HE_PHY_80_IN_160_80P80_FSZ		1
-#define HE_PHY_ER_SU_1X_LTF_0_8_GI_IDX		68	/* HE ER SU 1x HE-LTF 0.8 GI */
-#define HE_PHY_ER_SU_1X_LTF_0_8_GI_FSZ		1
-#define HE_PHY_MIDAMBLE_2X_1X_LTF_IDX		69	/* Midamble TX/RX 2x & 1x HE LTF */
-#define HE_PHY_MIDAMBLE_2X_1X_LTF_FSZ		1
-#define HE_PHY_DCM_MAX_BW_IDX			70	/* DCM Max BW */
-#define HE_PHY_DCM_MAX_BW_FSZ			2
-#define HE_PHY_ABOVE16_OFDM_SYM_IDX		72	/* Longer than 16 HE-SIGB OFDM
+#define HE_PHY_CH_WIDTH_SET_IDX			1u	/* Channel Width Set */
+#define HE_PHY_CH_WIDTH_SET_FSZ			7u
+#define HE_PHY_PUNCT_PREAMBLE_RX_IDX		8u	/* Punctured Preamble Rx */
+#define HE_PHY_PUNCT_PREAMBLE_RX_FSZ		4u
+#define HE_PHY_DEVICE_CLASS_IDX			12u	/* Device Class */
+#define HE_PHY_DEVICE_CLASS_FSZ			1u
+#define HE_PHY_LDPC_PYLD_IDX			13u	/* LDPC Coding In Payload */
+#define HE_PHY_LDPC_PYLD_FSZ			1u
+#define HE_PHY_SU_PPDU_1x_LTF_0_8_GI_IDX	14u	/* SU PPDU 1x LTF GI 0.8 us */
+#define HE_PHY_SU_PPDU_1x_LTF_0_8_GI_FSZ	1u
+#define HE_PHY_MIDAMBLE_MAX_NSTS_IDX		15u	/* Midamble Tx/Rx Max NSTS */
+#define HE_PHY_MIDAMBLE_MAX_NSTS_FSZ		2u
+#define HE_PHY_NDP_4x_LTF_3_2_GI_IDX		17u	/* NDP with 4xLTF 3.2us GI */
+#define HE_PHY_NDP_4x_LTF_3_2_GI_FSZ		1u
+#define HE_PHY_STBC_TX_IDX			18u	/* STBC Tx for <= 80 MHz */
+#define HE_PHY_STBC_TX_FSZ			1u
+#define HE_PHY_STBC_RX_IDX			19u	/* STBC Rx for <= 80 MHz */
+#define HE_PHY_STBC_RX_FSZ			1u
+#define HE_PHY_DOPPLER_TX_IDX			20u	/* Doppler Tx */
+#define HE_PHY_DOPPLER_TX_FSZ			1u
+#define HE_PHY_DOPPLER_RX_IDX			21u	/* Doppler Rx */
+#define HE_PHY_DOPPLER_RX_FSZ			1u
+#define HE_PHY_FULL_BW_UL_MU_MIMO_IDX		22u	/* Full bandwidth UL MU MIMO */
+#define HE_PHY_FULL_BW_UL_MU_MIMO_FSZ		1u
+#define HE_PHY_PART_BW_UL_MU_MIMO_IDX		23u	/* Partial bandwidth UL MU MIMO */
+#define HE_PHY_PART_BW_UL_MU_MIMO_FSZ		1u
+#define HE_PHY_DCM_MAX_CONST_TX_IDX		24u	/* DCM Max Constellation Tx */
+#define HE_PHY_DCM_MAX_CONST_TX_FSZ		2u
+#define HE_PHY_DCM_MAX_NSS_TX_IDX		26u	/* DCM Max NSS Tx */
+#define HE_PHY_DCM_MAX_NSS_TX_FSZ		1u
+#define HE_PHY_DCM_MAX_CONST_RX_IDX		27u	/* DCM Max Constellation Rx */
+#define HE_PHY_DCM_MAX_CONST_RX_FSZ		2u
+#define HE_PHY_DCM_MAX_NSS_RX_IDX		29u	/* DCM Max NSS Rx */
+#define HE_PHY_DCM_MAX_NSS_RX_FSZ		1u
+#define HE_PHY_RX_MU_PPDU_IDX			30u	/* Rx HE MU PPDU From nonAP STA */
+#define HE_PHY_RX_MU_PPDU_FSZ			1u
+#define HE_PHY_SU_BEAMFORMER_IDX		31u	/* SU Beamformer */
+#define HE_PHY_SU_BEAMFORMER_FSZ		1u
+#define HE_PHY_SU_BEAMFORMEE_IDX		32u	/* SU Beamformee */
+#define HE_PHY_SU_BEAMFORMEE_FSZ		1u
+#define HE_PHY_MU_BEAMFORMER_IDX		33u	/* MU Beamformer */
+#define HE_PHY_MU_BEAMFORMER_FSZ		1u
+#define HE_PHY_BEAMFORMEE_STS_BELOW80MHZ_IDX	34u	/* Beamformee STS For <= 80MHz */
+#define HE_PHY_BEAMFORMEE_STS_BELOW80MHZ_FSZ	3u
+#define HE_PHY_BEAMFORMEE_STS_ABOVE80MHZ_IDX	37u	/* Beamformee STS For >80 MHz */
+#define HE_PHY_BEAMFORMEE_STS_ABOVE80MHZ_FSZ	3u
+#define HE_PHY_SOUND_DIM_BELOW80MHZ_IDX		40u	/* Num. Sounding Dim.<= 80 MHz */
+#define HE_PHY_SOUND_DIM_BELOW80MHZ_FSZ		3u
+#define HE_PHY_SOUND_DIM_ABOVE80MHZ_IDX		43u	/* Num. Sounding Dim.> 80 MHz */
+#define HE_PHY_SOUND_DIM_ABOVE80MHZ_FSZ		3u
+#define HE_PHY_SU_FEEDBACK_NG16_SUPPORT_IDX	46u	/* Ng=16 For SU Feedback */
+#define HE_PHY_SU_FEEDBACK_NG16_SUPPORT_FSZ	1u
+#define HE_PHY_MU_FEEDBACK_NG16_SUPPORT_IDX	47u	/* Ng=16 For MU Feedback */
+#define HE_PHY_MU_FEEDBACK_NG16_SUPPORT_FSZ	1u
+#define HE_PHY_SU_CODEBOOK_SUPPORT_IDX		48u	/* Codebook Sz {4, 2} For SU */
+#define HE_PHY_SU_CODEBOOK_SUPPORT_FSZ		1u
+#define HE_PHY_MU_CODEBOOK_SUPPORT_IDX		49u	/* Codebook Size {7, 5} For MU */
+#define HE_PHY_MU_CODEBOOK_SUPPORT_FSZ		1u
+#define HE_PHY_TRG_SU_BFM_FEEDBACK_IDX		50u	/* Triggered SU TXBF Feedback */
+#define HE_PHY_TRG_SU_BFM_FEEDBACK_FSZ		1u
+#define HE_PHY_TRG_MU_BFM_FEEDBACK_IDX		51u	/* Triggered MU TXBF partial BW Feedback */
+#define HE_PHY_TRG_MU_BFM_FEEDBACK_FSZ		1u
+#define HE_PHY_TRG_CQI_FEEDBACK_IDX		52u	/* Triggered CQI Feedback */
+#define HE_PHY_TRG_CQI_FEEDBACK_FSZ		1u
+#define HE_PHY_PART_BW_EXT_RANGE_IDX		53u	/* Partial BW Extended Range */
+#define HE_PHY_PART_BW_EXT_RANGE_FSZ		1u
+#define HE_PHY_DL_MU_MIMO_PART_BW_IDX		54u	/* Partial Bandwidth DL MU MIMO */
+#define HE_PHY_DL_MU_MIMO_PART_BW_FSZ		1u
+#define HE_PHY_PPE_THRESH_PRESENT_IDX		55u	/* PPE Threshold Present */
+#define HE_PHY_PPE_THRESH_PRESENT_FSZ		1u
+#define HE_PHY_SRP_SR_SUPPORT_IDX		56u	/* SRP based SR Support */
+#define HE_PHY_SRP_SR_SUPPORT_FSZ		1u
+#define HE_PHY_POWER_BOOST_FACTOR_IDX		57u	/* Power Boost Factor Support */
+#define HE_PHY_POWER_BOOST_FACTOR_FSZ		1u
+#define HE_PHY_4X_LTF_0_8_GI_SUPPORT_IDX	58u	/* HE SU PPDU And HE MU PPDU with
+							 * 4x HE-LTF And 0.8 us GI
+							 */
+#define HE_PHY_4X_LTF_0_8_GI_SUPPORT_FSZ	1u
+#define HE_PHY_MAX_NC_IDX			59u	/* Maximum NC */
+#define HE_PHY_MAX_NC_FSZ			3u
+#define HE_PHY_STBC_TX_ABOVE_80_IDX		62u	/* STBC Tx above 80 MHz */
+#define HE_PHY_STBC_TX_ABOVE_80_FSZ		1u
+#define HE_PHY_STBC_RX_ABOVE_80_IDX		63u	/* STBC Rx above 80 MHz */
+#define HE_PHY_STBC_RX_ABOVE_80_FSZ		1u
+#define HE_PHY_ER_SU_4X_LTF_0_8_GI_IDX		64u	/* ER SU PPDU 4x HE-LTF 0.8 GI */
+#define HE_PHY_ER_SU_4X_LTF_0_8_GI_FSZ		1u
+#define HE_PHY_20_IN_40_2G_IDX			65u	/* 20 in 40 MHz HE PPDU in 2G */
+#define HE_PHY_20_IN_40_2G_FSZ			1u
+#define HE_PHY_20_IN_160_80P80_IDX		66u	/* 20 in 160/80+80 MHz HE PPDU */
+#define HE_PHY_20_IN_160_80P80_FSZ		1u
+#define HE_PHY_80_IN_160_80P80_IDX		67u	/* 80 in 160/80+80 MHz HE PPDU */
+#define HE_PHY_80_IN_160_80P80_FSZ		1u
+#define HE_PHY_ER_SU_1X_LTF_0_8_GI_IDX		68u	/* HE ER SU 1x HE-LTF 0.8 GI */
+#define HE_PHY_ER_SU_1X_LTF_0_8_GI_FSZ		1u
+#define HE_PHY_MIDAMBLE_2X_1X_LTF_IDX		69u	/* Midamble TX/RX 2x & 1x HE LTF */
+#define HE_PHY_MIDAMBLE_2X_1X_LTF_FSZ		1u
+#define HE_PHY_DCM_MAX_BW_IDX			70u	/* DCM Max BW */
+#define HE_PHY_DCM_MAX_BW_FSZ			2u
+#define HE_PHY_ABOVE16_OFDM_SYM_IDX		72u	/* Longer than 16 HE-SIGB OFDM
 							 * Symbol support
 							 */
-#define HE_PHY_ABOVE16_OFDM_SYM_FSZ		1
-#define HE_PHY_NON_TRIG_CQI_FDBK_IDX		73	/* Non-triggered CQI feedback Support */
-#define HE_PHY_NON_TRIG_CQI_FDBK_FSZ		1
-#define HE_PHY_1024_QAM_TX_BELOW_242_RU_IDX	74	/* Tx 1024 QAM in < 242 RU Tone Support */
-#define HE_PHY_1024_QAM_TX_BELOW_242_RU_FSZ	1
-#define HE_PHY_1024_QAM_RX_BELOW_242_RU_IDX	75	/* Rx 1024 QAM in < 242 RU Tone Support */
-#define HE_PHY_1024_QAM_RX_BELOW_242_RU_FSZ	1
-#define HE_PHY_RX_FULL_BW_MU_COMP_SIGB_IDX	76	/* Rx Full BW MU PPDU with Comp. SIGB */
-#define HE_PHY_RX_FULL_BW_MU_COMP_SIGB_FSZ	1
-#define HE_PHY_RX_FULL_BW_MU_NON_COMP_SIGB_IDX	77	/* Rx Full BW MU PPDU Non-Comp SIGB */
-#define HE_PHY_RX_FULL_BW_MU_NON_COMP_SIGB_FSZ	1
-#define HE_PHY_NOMINAL_PACKET_PADDING_IDX	78	/* Nominal Packet Padding */
-#define HE_PHY_NOMINAL_PACKET_PADDING_FSZ	2
+#define HE_PHY_ABOVE16_OFDM_SYM_FSZ		1u
+#define HE_PHY_NON_TRIG_CQI_FDBK_IDX		73u	/* Non-triggered CQI feedback Support */
+#define HE_PHY_NON_TRIG_CQI_FDBK_FSZ		1u
+#define HE_PHY_1024_QAM_TX_BELOW_242_RU_IDX	74u	/* Tx 1024 QAM in < 242 RU Tone Support */
+#define HE_PHY_1024_QAM_TX_BELOW_242_RU_FSZ	1u
+#define HE_PHY_1024_QAM_RX_BELOW_242_RU_IDX	75u	/* Rx 1024 QAM in < 242 RU Tone Support */
+#define HE_PHY_1024_QAM_RX_BELOW_242_RU_FSZ	1u
+#define HE_PHY_RX_FULL_BW_MU_COMP_SIGB_IDX	76u	/* Rx Full BW MU PPDU with Comp. SIGB */
+#define HE_PHY_RX_FULL_BW_MU_COMP_SIGB_FSZ	1u
+#define HE_PHY_RX_FULL_BW_MU_NON_COMP_SIGB_IDX	77u	/* Rx Full BW MU PPDU Non-Comp SIGB */
+#define HE_PHY_RX_FULL_BW_MU_NON_COMP_SIGB_FSZ	1u
+#define HE_PHY_NOMINAL_PACKET_PADDING_IDX	78u	/* Nominal Packet Padding */
+#define HE_PHY_NOMINAL_PACKET_PADDING_FSZ	2u
 
 /* HE Mac Capabilities values */
 /* b3-b4: Fragmentation Support field (table 9-262z) */
-#define HE_MAC_FRAG_NOSUPPORT		0	/* dynamic fragmentation not supported */
-#define HE_MAC_FRAG_PER_MPDU		1	/* dynamic fragmentation of MPDU/SMPDU */
-#define HE_MAC_FRAG_ONE_PER_AMPDU	2	/* upto 1 fragment per AMPDU/MMPDU */
-#define HE_MAC_FRAG_MULTI_PER_AMPDU	3	/* multiple fragment per AMPDU */
+#define HE_MAC_FRAG_NOSUPPORT			0u	/* dynamic fragmentation not supported */
+#define HE_MAC_FRAG_PER_MPDU			1u	/* dynamic fragmentation of MPDU/SMPDU */
+#define HE_MAC_FRAG_ONE_PER_AMPDU		2u	/* upto 1 fragment per AMPDU/MMPDU */
+#define HE_MAC_FRAG_MULTI_PER_AMPDU		3u	/* multiple fragment per AMPDU */
 
 /* b5-b7 : Maximum Number Of Fragmented MSDUs/AMSDUs Exponent */
-#define HE_MAC_MAXFRAG_NUM_NO_RESTRICT	7
+#define HE_MAC_MAXFRAG_NUM_NO_RESTRICT		7u
 
 /* b8-b9: Minimum payload size of first fragment */
-#define HE_MAC_MINFRAG_NO_RESTRICT	0	/* no restriction on min. payload size */
-#define HE_MAC_MINFRAG_SIZE_128		1	/* minimum payload size of 128 Bytes */
-#define HE_MAC_MINFRAG_SIZE_256		2	/* minimum payload size of 256 Bytes */
-#define HE_MAC_MINFRAG_SIZE_512		3	/* minimum payload size of 512 Bytes */
+#define HE_MAC_MINFRAG_NO_RESTRICT		0u	/* no restriction on min. payload size */
+#define HE_MAC_MINFRAG_SIZE_128			1u	/* minimum payload size of 128 Bytes */
+#define HE_MAC_MINFRAG_SIZE_256			2u	/* minimum payload size of 256 Bytes */
+#define HE_MAC_MINFRAG_SIZE_512			3u	/* minimum payload size of 512 Bytes */
 
 /* b10-b11: Trigger Frame MAC Padding Duration */
-#define HE_MAC_TRIG_MAC_PAD_0		0
-#define HE_MAC_TRIG_MAC_PAD_8us		1
-#define HE_MAC_TRIG_MAC_PAD_16us	2
+#define HE_MAC_TRIG_MAC_PAD_0			0u
+#define HE_MAC_TRIG_MAC_PAD_8us			1u
+#define HE_MAC_TRIG_MAC_PAD_16us		2u
 
 /* b15-b16: HE Link Adaptation */
-#define HE_MAC_SEND_NO_MFB		0	/* if STA does not provide HE MFB */
-#define HE_MAC_SEND_UNSOLICATED_MFB	2	/* if STA provides unsolicited HE MFB */
-#define HE_MAC_SEND_MFB_IN_RESPONSE	3	/* if STA can provide HE MFB in response to
-						* HE MRQ and if the STA provides unsolicited HE MFB.
-						*/
+#define HE_MAC_SEND_NO_MFB		0u	/* if STA does not provide HE MFB */
+#define HE_MAC_SEND_UNSOLICATED_MFB	2u	/* if STA provides unsolicited HE MFB */
+#define HE_MAC_SEND_MFB_IN_RESPONSE	3u	/* if STA can provide HE MFB in response to
+						 * HE MRQ and if the STA provides
+						 * unsolicited HE MFB.
+						 */
 
 /* b27-b28: Max. AMPDU Length HE Exponent */
 /* Use Max AMPDU length exponent from VHT or HT */
-#define HE_MAC_MAX_AMPDU_EXP_ADOPT_VHT	(0)
+#define HE_MAC_MAX_AMPDU_EXP_ADOPT_VHT	0u
 /* Max. AMPDU length =
  * 2^(20 + MAX_AMPDU_LEN_HE_EXPO_1) -1 (if this value in VHT CAP is 7) or
  * 2^(16 + MAX_AMPDU_LEN_HE_EXPO_1) -1 (if this value in HT CAP is 3).
  */
-#define HE_MAC_MAX_AMPDU_EXP_HE_1	(1)
+#define HE_MAC_MAX_AMPDU_EXP_HE_1	1u
 /* Max. AMPDU length =
  * 2^(20 + MAX_AMPDU_LEN_HE_EXPO_2) -1 (if this value in VHT CAP is 7) or
  * 2^(16 + MAX_AMPDU_LEN_HE_EXPO_2) -1 (if this value in HT CAP is 3).
  */
-#define HE_MAC_MAX_AMPDU_EXP_HE_2	(2)
+#define HE_MAC_MAX_AMPDU_EXP_HE_2	2u
 /* Max. AMPDU length =
  * 2^(20 + MAX_AMPDU_LEN_HE_EXPO_3) -1 (if this value in VHT CAP is 7) or
  * 2^(16 + MAX_AMPDU_LEN_HE_EXPO_3) -1 (if this value in HT CAP is 3).
  */
-#define HE_MAC_MAX_AMPDU_EXP_HE_3	(3)
+#define HE_MAC_MAX_AMPDU_EXP_HE_3	3u
 
 /* HE PHY Capabilities values */
 /* b1-b7: Channel Width Support field */
-#define HE_PHY_CH_WIDTH_2G_40		0x01
-#define HE_PHY_CH_WIDTH_5G_80		0x02
-#define HE_PHY_CH_WIDTH_5G_160		0x04
-#define HE_PHY_CH_WIDTH_5G_80P80	0x08
-#define HE_PHY_CH_WIDTH_2G_242RU	0x10
-#define HE_PHY_CH_WIDTH_5G_242RU	0x20
+#define HE_PHY_CH_WIDTH_2G_40		0x01u
+#define HE_PHY_CH_WIDTH_5G_80		0x02u
+#define HE_PHY_CH_WIDTH_5G_160		0x04u
+#define HE_PHY_CH_WIDTH_5G_80P80	0x08u
+#define HE_PHY_CH_WIDTH_2G_242RU	0x10u
+#define HE_PHY_CH_WIDTH_5G_242RU	0x20u
 
 /* b8-b11: Preamble puncturing Rx */
 /* Rx of 80 MHz preamble where secondary 20 MHz subchannel is punctured */
-#define HE_PHY_PREAMBLE_PUNC_RX_0	0x1
+#define HE_PHY_PREAMBLE_PUNC_RX_0	0x1u
 /* Rx of 80 MHz preamble where one of two 20 MHz subchannels in secondary 40 MHz is punctured */
-#define HE_PHY_PREAMBLE_PUNC_RX_1	0x2
+#define HE_PHY_PREAMBLE_PUNC_RX_1	0x2u
 /* Rx of 160 MHz or 80+80 MHz preamble where primary 80 MHz of
  * preamble only the secondary 20 MHz is punctured
  */
-#define HE_PHY_PREAMBLE_PUNC_RX_2	0x4
+#define HE_PHY_PREAMBLE_PUNC_RX_2	0x4u
 /* Rx of 160 MHz or 80+80 MHz preamble where primary 80 MHz of
  * the preamble, the primary 40 MHz is present
  */
-#define HE_PHY_PREAMBLE_PUNC_RX_3	0x8
+#define HE_PHY_PREAMBLE_PUNC_RX_3	0x8u
 
 /* b24-b26: DCM Encoding Tx */
-#define HE_PHY_TX_DCM_ENC_NOSUPPORT	0x00
-#define HE_PHY_TX_DCM_ENC_BPSK		0x01
-#define HE_PHY_TX_DCM_ENC_QPSK		0x02
-#define HE_PHY_TX_DCM_ENC_QAM		0x03
+#define HE_PHY_TX_DCM_ENC_NOSUPPORT	0x00u
+#define HE_PHY_TX_DCM_ENC_BPSK		0x01u
+#define HE_PHY_TX_DCM_ENC_QPSK		0x02u
+#define HE_PHY_TX_DCM_ENC_QAM		0x03u
 
-#define HE_PHY_TX_DCM_1_SS		0x00
-#define HE_PHY_TX_DCM_2_SS		0x01
+#define HE_PHY_TX_DCM_1_SS		0x00u
+#define HE_PHY_TX_DCM_2_SS		0x01u
 
 /* b27-b29: DCM Encoding Rx */
-#define HE_PHY_RX_DCM_ENC_NOSUPPORT	0x00
-#define HE_PHY_RX_DCM_ENC_BPSK		0x01
-#define HE_PHY_RX_DCM_ENC_QPSK		0x02
-#define HE_PHY_RX_DCM_ENC_QAM		0x03
+#define HE_PHY_RX_DCM_ENC_NOSUPPORT	0x00u
+#define HE_PHY_RX_DCM_ENC_BPSK		0x01u
+#define HE_PHY_RX_DCM_ENC_QPSK		0x02u
+#define HE_PHY_RX_DCM_ENC_QAM		0x03u
 
-#define HE_PHY_RX_DCM_1_SS		0x00
-#define HE_PHY_RX_DCM_2_SS		0x01
+#define HE_PHY_RX_DCM_1_SS		0x00u
+#define HE_PHY_RX_DCM_2_SS		0x01u
 
 /* b70-b71: DCM Max BW */
-#define HE_PHY_DCM_MAX_BW_20		0
-#define HE_PHY_DCM_MAX_BW_40		1
-#define HE_PHY_DCM_MAX_BW_80		2
-#define HE_PHY_DCM_MAX_BW_160		3
+#define HE_PHY_DCM_MAX_BW_20		0u
+#define HE_PHY_DCM_MAX_BW_40		1u
+#define HE_PHY_DCM_MAX_BW_80		2u
+#define HE_PHY_DCM_MAX_BW_160		3u
 
 /* b78-b79 */
-#define HE_PHY_NOMINAL_PKT_PADDING_0_US		0
-#define HE_PHY_NOMINAL_PKT_PADDING_8_US		1
-#define HE_PHY_NOMINAL_PKT_PADDING_16_US	2
-#define HE_PHY_NOMINAL_PKT_PADDING_RESERVED	3
+#define HE_PHY_NOMINAL_PKT_PADDING_0_US		0u
+#define HE_PHY_NOMINAL_PKT_PADDING_8_US		1u
+#define HE_PHY_NOMINAL_PKT_PADDING_16_US	2u
+#define HE_PHY_NOMINAL_PKT_PADDING_RESERVED	3u
 
 /* HE Duration based RTS Threshold Figure 9-589cr */
-#define HE_RTS_THRES_DISABLED		1023
-#define HE_RTS_THRES_ALL_FRAMES		0
+#define HE_RTS_THRES_DISABLED		1023u
+#define HE_RTS_THRES_ALL_FRAMES		0u
 #define HE_RTS_THRES_MASK		0x03ff
 
 /* Tx Rx HE MCS Support field format : Table 9-589cm */
@@ -427,12 +447,12 @@ typedef uint8 he_phy_cap_t[HE_PHY_CAP_INFO_SIZE];
 * Bandwidth configuration indices used in the HE TX-RX MCS support field
 * Section 9.4.2.218.4
 */
-#define HE_BW20_CFG_IDX		0
-#define HE_BW40_CFG_IDX		1
-#define HE_BW80_CFG_IDX		2
-#define HE_BW80P80_CFG_IDX	3
-#define HE_BW160_CFG_IDX	4
-#define HE_MAX_BW_CFG		5
+#define HE_BW20_CFG_IDX		0u
+#define HE_BW40_CFG_IDX		1u
+#define HE_BW80_CFG_IDX		2u
+#define HE_BW80P80_CFG_IDX	3u
+#define HE_BW160_CFG_IDX	4u
+#define HE_MAX_BW_CFG		5u
 
 #define HE_MCS_CODE_0_7		0u
 #define HE_MCS_CODE_0_9		1u
@@ -446,6 +466,10 @@ typedef uint8 he_phy_cap_t[HE_PHY_CAP_INFO_SIZE];
 * 128 in the SSID element
 */
 #define WLC_SSID_VAL_IN_SHORT_SSID	128u
+#define WLC_SSID_LEN_IN_SHORT_SSID	1u
+#define IS_SSID_IE_INDICATING_SHORT_SSID(ssidie) \
+	(((ssidie)->len == WLC_SSID_LEN_IN_SHORT_SSID) && \
+	 ((ssidie)->data[0] == WLC_SSID_VAL_IN_SHORT_SSID))
 
 /* Defines for The Max HE MCS For n SS subfield (where n = 1, ..., 8) */
 #define HE_MCS_MAP_NSS_MAX	8u	/* Max number of streams possible */
@@ -472,7 +496,7 @@ typedef uint8 he_phy_cap_t[HE_PHY_CAP_INFO_SIZE];
 #define HE_MCS_NSS_SUP_FLD_TXRX_MAP_SZ (HE_MCS_NSS_SUP_FLD_TXRX_MAP_LEN * 8u) /* 32 bits */
 
 /* One TX-RX unit-map (80 MHz) */
-#define HE_MCS_NSS_SUP_FLD_MIN_LEN	(HE_MCS_NSS_SUP_FLD_TXRX_MAP_LEN)
+#define HE_MCS_NSS_SUP_FLD_MIN_LEN	HE_MCS_NSS_SUP_FLD_TXRX_MAP_LEN
 /* Three TX-RX unit-maps (80 MHz, 160MHz, 80+80MHz) */
 #define HE_MCS_NSS_SUP_FLD_MAX_LEN	(HE_MCS_NSS_SUP_FLD_TXRX_MAP_LEN * 3u)
 
@@ -521,33 +545,36 @@ typedef nontrans_bssid_profile_subie_t nontrans_BSSID_profile_subie_t;
 
 #define maxBSSID_indicator maxbssid_indicator
 
+BCM_EXTENSION	/* struct containing flexible array member is the last field. */
 typedef BWL_PRE_PACKED_STRUCT struct multi_bssid_ie {
 	uint8 id;
 	uint8 len;
 	uint8 maxbssid_indicator;
-	nontrans_bssid_profile_subie_t profile[BCM_FLEX_ARRAY];
+
+	/* NOTE: array of structs that contains a flexible array member is non-ISO C compliant. */
+	nontrans_bssid_profile_subie_t profile[1];
 } BWL_POST_PACKED_STRUCT multi_bssid_ie_t;
 typedef multi_bssid_ie_t multi_BSSID_ie_t;
 
 #define DOT11_MULTIPLE_BSSID_PROFILE_SUBID 0
 
 /* Table 9-262ab, Highest MCS Supported subfield encoding */
-#define HE_CAP_MCS_CODE_0_7		0
-#define HE_CAP_MCS_CODE_0_8		1
-#define HE_CAP_MCS_CODE_0_9		2
-#define HE_CAP_MCS_CODE_0_10		3
-#define HE_CAP_MCS_CODE_0_11		4
-#define HE_CAP_MCS_CODE_SIZE		3	/* num bits for 1-stream */
-#define HE_CAP_MCS_CODE_MASK		0x7	/* mask for 1-stream */
+#define HE_CAP_MCS_CODE_0_7		0u
+#define HE_CAP_MCS_CODE_0_8		1u
+#define HE_CAP_MCS_CODE_0_9		2u
+#define HE_CAP_MCS_CODE_0_10		3u
+#define HE_CAP_MCS_CODE_0_11		4u
+#define HE_CAP_MCS_CODE_SIZE		3u	/* num bits for 1-stream */
+#define HE_CAP_MCS_CODE_MASK		0x7u	/* mask for 1-stream */
 
 #define HE_CAP_MCS_MAP_NSS_MAX	8u	/* Max number of streams possible */
 
 #define HE_MAX_RU_COUNT		4u	/* Max number of RU allocation possible */
 
-#define HE_NSSM1_IDX		0	/* Offset of NSSM1 field */
-#define HE_NSSM1_LEN		3	/* length of NSSM1 field in bits */
+#define HE_NSSM1_IDX		0u	/* Offset of NSSM1 field */
+#define HE_NSSM1_LEN		3u	/* length of NSSM1 field in bits */
 
-#define HE_RU_INDEX_MASK_IDX	3	/* Offset of RU index mask field */
+#define HE_RU_INDEX_MASK_IDX	3u	/* Offset of RU index mask field */
 #define HE_RU_INDEX_MASK_LEN	4u	/* length of RU Index mask field in bits */
 
 /* PPE Threshold field (figure 9-589co) */
@@ -567,20 +594,20 @@ typedef multi_bssid_ie_t multi_BSSID_ie_t;
 	(CEIL((HE_NSSM1_LEN + HE_RU_INDEX_MASK_LEN + ((nss) * (ruc) * 6)), 8))
 
 /* RU Allocation Index encoding (table 9-262ae) */
-#define HE_RU_ALLOC_IDX_242		0	/* RU alloc: 282 tones */
-#define HE_RU_ALLOC_IDX_484		1	/* RU alloc: 484 tones - 40Mhz */
-#define HE_RU_ALLOC_IDX_996		2	/* RU alloc: 996 tones - 80Mhz */
-#define HE_RU_ALLOC_IDX_2x996		3	/* RU alloc: 2x996 tones - 80p80/160Mhz */
+#define HE_RU_ALLOC_IDX_242		0u	/* RU alloc: 282 tones */
+#define HE_RU_ALLOC_IDX_484		1u	/* RU alloc: 484 tones - 40Mhz */
+#define HE_RU_ALLOC_IDX_996		2u	/* RU alloc: 996 tones - 80Mhz */
+#define HE_RU_ALLOC_IDX_2x996		3u	/* RU alloc: 2x996 tones - 80p80/160Mhz */
 
 /* Constellation Index encoding (table 9-262ac) */
-#define HE_CONST_IDX_BPSK		0
-#define HE_CONST_IDX_QPSK		1
-#define HE_CONST_IDX_16QAM		2
-#define HE_CONST_IDX_64QAM		3
-#define HE_CONST_IDX_256QAM		4
-#define HE_CONST_IDX_1024QAM		5
-#define HE_CONST_IDX_RSVD		6
-#define HE_CONST_IDX_NONE		7
+#define HE_CONST_IDX_BPSK		0u
+#define HE_CONST_IDX_QPSK		1u
+#define HE_CONST_IDX_16QAM		2u
+#define HE_CONST_IDX_64QAM		3u
+#define HE_CONST_IDX_256QAM		4u
+#define HE_CONST_IDX_1024QAM		5u
+#define HE_CONST_IDX_RSVD		6u
+#define HE_CONST_IDX_NONE		7u
 
 /* Min HE cap ie length when only 80Mhz is supported */
 #define HE_CAP_IE_MIN_LEN	(sizeof(he_cap_ie_t) - TLV_HDR_LEN + HE_MCS_NSS_SUP_FLD_MIN_LEN)
@@ -608,16 +635,16 @@ typedef uint8 he_op_parms_t[HE_OP_PARAMS_SIZE];
 #define HE_OP_COL_LOC_BSS_FSZ		1u
 #define HE_OP_ER_SU_DISABLE_IDX		16u
 #define HE_OP_ER_SU_DISABLE_FSZ		1u
-#define HE_OP_6G_OP_INFO_PRESENT_IDX  17u
-#define HE_OP_6G_OP_INFO_PRESENT_FSZ  1u
+#define HE_OP_6G_OP_INFO_PRESENT_IDX	17u
+#define HE_OP_6G_OP_INFO_PRESENT_FSZ	1u
 
 /* BSS Color Information field (figure 9-589cs) */
-#define HE_OP_BSS_COLOR_IDX		0	/* BSS Color */
-#define HE_OP_BSS_COLOR_FSZ		6
-#define HE_OP_PART_BSS_COLOR_IDX	6	/* Partial BSS Color */
-#define HE_OP_PART_BSS_COLOR_FSZ	1
-#define HE_OP_DISABLE_BSSCOLOR_IDX	7	/* BSS Color Disable */
-#define HE_OP_DISABLE_BSSCOLOR_FSZ	1
+#define HE_OP_BSS_COLOR_IDX		0u	/* BSS Color */
+#define HE_OP_BSS_COLOR_FSZ		6u
+#define HE_OP_PART_BSS_COLOR_IDX	6u	/* Partial BSS Color */
+#define HE_OP_PART_BSS_COLOR_FSZ	1u
+#define HE_OP_DISABLE_BSSCOLOR_IDX	7u	/* BSS Color Disable */
+#define HE_OP_DISABLE_BSSCOLOR_FSZ	1u
 
 /* b4-b13: TXOP Duration RTS threshold */
 #define HE_OP_TXOP_RTS_THRESH_DISABLED	1023u
@@ -650,25 +677,46 @@ typedef BWL_PRE_PACKED_STRUCT struct he_op_ie {
 #define HE_6G_OP_REG_INFO_INDOOR_AP_US  0u
 #define HE_6G_OP_REG_INFO_SP_AP_US      1u
 
-/* Figure 9-788l Control field format in Draft P802.11ax_D6.0 */
+/* Figure 9-906 Control field format in Draft P802.11-REVme/D5.0 */
 #define HE_6G_CTL_CHBW_MASK         0x03u
 #define HE_6G_OP_CTL_CHBW(ctl) (ctl & HE_6G_CTL_CHBW_MASK)
+
 #define HE_6G_CTL_DUP_BCN_MASK      0x04u
-#define HE_6G_CTL_REG_INFO_MASK     0x38u
-#define HE_6G_CTL_REG_INFO_SHIFT    3u
-#define HE_6G_OP_CTL_REG_INFO(ctl) \
-	((ctl & HE_6G_CTL_REG_INFO_MASK) >> HE_6G_CTL_REG_INFO_SHIFT)
-
-#define HE_6G_OP_REG_INFO_LOW_PWR	0u	/* INDOOR Low Power */
-#define HE_6G_OP_REG_INFO_STD_PWR	1u	/* Standard Power */
-#define HE_6G_OP_REG_INFO_VLP_PWR	2u	/* Very low Power */
-#define HE_6G_OP_REG_INFO_INDR_ENAB	3u	/* Indoor Enabled */
-#define HE_6G_OP_REG_INFO_INDR_STD_PWR	4u	/* Indoor Standard Power */
-#define HE_6G_OP_REG_INFO_CAT_MAX	5u	/* Category reserved */
-
 #define HE_6G_CTL_DUP_BCN_SHIFT     0x02u
 #define HE_6G_OP_CTL_DUP_BCN(ctl) \
 	((ctl & HE_6G_CTL_DUP_BCN_MASK) >> HE_6G_CTL_DUP_BCN_SHIFT)
+
+#define HE_6G_CTL_REG_INFO_MASK		0x38u /* Reg Info 3 bits leagcy version */
+#define HE_6G_CTL_REG_INFO_MASK_4BITS	0x78u /* Use Reg Info 4 bits, Draft P802.11-REVme/D5.0 */
+
+#define HE_6G_CTL_REG_INFO_SHIFT	3u
+
+/* This is for legacy Reg Info 3 bits */
+#define HE_6G_OP_CTL_REG_INFO(ctl) \
+	((ctl & HE_6G_CTL_REG_INFO_MASK) >> HE_6G_CTL_REG_INFO_SHIFT)
+
+/* Use new Reg Info 4 bits, Draft P802.11-REVme/D5.0 */
+#define HE_6G_OP_CTL_REG_INFO_4BITS(ctl) \
+	((ctl & HE_6G_CTL_REG_INFO_MASK_4BITS) >> HE_6G_CTL_REG_INFO_SHIFT)
+
+/* See Table E-12 in Draft P802.11-REVme/D5.0 */
+#define HE_6G_OP_REG_INFO_LOW_PWR			0u	/* Indoor AP (LPI) */
+#define HE_6G_OP_REG_INFO_STD_PWR			1u	/* Standard Power (SP) */
+#define HE_6G_OP_REG_INFO_VLP_PWR			2u	/* Very Low Power (VLP) */
+#define HE_6G_OP_REG_INFO_INDR_ENAB			3u	/* Indoor Enabled AP */
+#define HE_6G_OP_REG_INFO_INDR_STD_PWR			4u	/* Indoor Standard Power AP */
+
+/* See Table E-13 in Draft P802.11-REVme/D5.0
+ * The Composite AP (i.e., LPI plus SP) is 8.
+ * The Reg Info values 9..15 are reserved.
+ */
+#define HE_6G_OP_REG_INFO_COMPOSITE_LPI_SP		8u	/* Supports LPI + SP */
+
+/* Category max for the legacy vlaues (0,1,2,3 and 4).
+ * Currently, this is used for IOVAR input validation in the case of TPETEST.
+ * Do not change this value.
+ */
+#define HE_6G_OP_REG_INFO_CAT_MAX			5u
 
 /* HE 6G Operation info */
 typedef BWL_PRE_PACKED_STRUCT struct he_6g_op_info {
@@ -755,7 +803,7 @@ typedef BWL_PRE_PACKED_STRUCT struct he_muedca_ie {
 #define HE_MU_EDCA_PARAM_UPD_CNT_IDX	0u	/* EDCA Parameter Set Update Count */
 #define HE_MU_EDCA_PARAM_UPD_CNT_LEN	4u
 
-#define HE_MU_SIGA_SIGB_MCS_DPCU	0
+#define HE_MU_SIGA_SIGB_MCS_DPCU	0u
 #define HE_MU_SIGA_SIGB_SYMS_DPCU	3u
 #define HE_MU_SIGA_GI_LTF_DPCU		3u
 
@@ -763,16 +811,16 @@ typedef BWL_PRE_PACKED_STRUCT struct he_muedca_ie {
  * Spatial Reuse Parameter Set element (sec 9.4.2.241)
  */
 /* bit position and field width */
-#define HE_SRP_CTRL_SRP_DISALLOW_IDX			0	/* SRP Disallowed */
-#define HE_SRP_CTRL_SRP_DISALLOW_FSZ			1
-#define HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW_IDX	1	/* NonSRG OBSS PD SR Disallowed */
-#define HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW_FSZ	1
-#define HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT_IDX		2	/* NonSRG Offset Present */
-#define HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT_FSZ		1
-#define HE_SRP_CTRL_SRG_INFO_PRESENT_IDX		3	/* SRG Information Present */
-#define HE_SRP_CTRL_SRG_INFO_PRESENT_FSZ		1
-#define HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED_IDX	4	/* HESIGA_SRP_value15_allowed */
-#define HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED_FSZ	1
+#define HE_SRP_CTRL_SRP_DISALLOW_IDX			0u	/* SRP Disallowed */
+#define HE_SRP_CTRL_SRP_DISALLOW_FSZ			1u
+#define HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW_IDX	1u	/* NonSRG OBSS PD SR Disallowed */
+#define HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW_FSZ	1u
+#define HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT_IDX		2u	/* NonSRG Offset Present */
+#define HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT_FSZ		1u
+#define HE_SRP_CTRL_SRG_INFO_PRESENT_IDX		3u	/* SRG Information Present */
+#define HE_SRP_CTRL_SRG_INFO_PRESENT_FSZ		1u
+#define HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED_IDX	4u	/* HESIGA_SRP_value15_allowed */
+#define HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED_FSZ	1u
 /* Reserved b5-b7 */
 
 /* Spatial reuse element element */
@@ -796,11 +844,11 @@ typedef BWL_PRE_PACKED_STRUCT struct he_srp_ie {
 	HE_SRP_SRG_PARTIAL_BSSID_BITMAP_LEN)
 
 /* Bit field Masks */
-#define HE_SRP_CTRL_SRP_DISALLOW		(1 << HE_SRP_CTRL_SRP_DISALLOW_IDX)
-#define HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW (1 << HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW_IDX)
-#define HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT	(1 << HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT_IDX)
-#define HE_SRP_CTRL_SRG_INFO_PRESENT		(1 << HE_SRP_CTRL_SRG_INFO_PRESENT_IDX)
-#define HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED	(1 << HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED_IDX)
+#define HE_SRP_CTRL_SRP_DISALLOW		(1u << HE_SRP_CTRL_SRP_DISALLOW_IDX)
+#define HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW (1u << HE_SRP_CTRL_NON_SRG_OBSS_PD_SR_DISALLOW_IDX)
+#define HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT	(1u << HE_SRP_CTRL_NON_SRG_OFFSET_PRESENT_IDX)
+#define HE_SRP_CTRL_SRG_INFO_PRESENT		(1u << HE_SRP_CTRL_SRG_INFO_PRESENT_IDX)
+#define HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED	(1u << HE_SRP_CTRL_HESIGA_SR_VALUE15_ALLOWED_IDX)
 
 /**
  * ref: (Table 28-21 Page 473 D3.0)
@@ -1045,142 +1093,161 @@ typedef BWL_PRE_PACKED_STRUCT struct he_bsscolor_change_ie {
 /* For HE MU SIG A : RX PLCP4 bit fields [8bit] */
 #define HE_MU_SIGA2_STBC_RX_MASK	0x40u
 
+/**
+ * Draft P802.11REVme_D4.2; 9.4.2.312 Non-AP STA Regulatory Connectivity element
+ */
+typedef BWL_PRE_PACKED_STRUCT struct he_non_ap_sta_reg_conn_ie {
+	uint8 id;
+	uint8 len;
+	uint8 id_ext;
+	uint8 reg_conn_data[];	/* Variable length Regulatory Connectivity Data */
+} BWL_POST_PACKED_STRUCT he_non_ap_sta_reg_conn_ie_t;
+
+/* Refer Table 9-415 Regulatory Connectivity field.
+ * Client device capabilities, various bits for byte 0.
+ */
+#define HE_NON_AP_STA_REG_CONN_DATA_LPI_CLIENT_VALID	(1u << 0u) /* bit 0 */
+#define HE_NON_AP_STA_REG_CONN_DATA_LPI_CLIENT		(1u << 1u) /* bit 1 */
+
+#define HE_NON_AP_STA_REG_CONN_DATA_SP_CLIENT_VALID	(1u << 2u) /* bit 2 */
+#define HE_NON_AP_STA_REG_CONN_DATA_SP_CLIENT		(1u << 3u) /* bit 3 */
+
 /* This marks the end of a packed structure section. */
 #include <packed_section_end.h>
 
 /* HE Action Frame */
 /* FIXME: use temporary Offsets until the spec assigns them */
-#define HE_AF_CAT_OFF	0
-#define HE_AF_ACT_OFF	1
+#define HE_AF_CAT_OFF	0u
+#define HE_AF_ACT_OFF	1u
 
 /* TWT Setup */
-#define HE_AF_TWT_SETUP_TOKEN_OFF	2
-#define HE_AF_TWT_SETUP_TWT_IE_OFF	3
+#define HE_AF_TWT_SETUP_TOKEN_OFF	2u
+#define HE_AF_TWT_SETUP_TWT_IE_OFF	3u
 
 /* TWT Teardown */
-#define HE_AF_TWT_TEARDOWN_FLOW_OFF	2
+#define HE_AF_TWT_TEARDOWN_FLOW_OFF	2u
 
 /* TWT Information */
-#define HE_AF_TWT_INFO_OFF	2
+#define HE_AF_TWT_INFO_OFF	2u
 
 /* HE Action ID */
 /* FIXME: use temporary IDs until ANA assigns them */
-#define HE_ACTION_TWT_SETUP	1
-#define HE_ACTION_TWT_TEARDOWN	2
-#define HE_ACTION_TWT_INFO	3
+#define HE_ACTION_TWT_SETUP	1u
+#define HE_ACTION_TWT_TEARDOWN	2u
+#define HE_ACTION_TWT_INFO	3u
 
 /* HE Basic trigger frame common info fields */
-#define HE_TRIG_CMNINFO_SZ	8
+#define HE_TRIG_CMNINFO_SZ	8u
 typedef uint8 he_trig_cmninfo_set_t[HE_TRIG_CMNINFO_SZ];
 
 /* bit position and field width */
-#define HE_TRIG_CMNINFO_FRMTYPE_INDX		0	/* Trigger frame type */
-#define HE_TRIG_CMNINFO_FRMTYPE_FSZ		4
-#define HE_TRIG_CMNINFO_LSIGLEN_INDX		4	/* L-sig length */
-#define HE_TRIG_CMNINFO_LSIGLEN_FSZ		12
-#define HE_TRIG_CMNINFO_CASCADEIND_INDX		16	/* Cascade indication */
-#define HE_TRIG_CMNINFO_CASCADEIND_FSZ		1
-#define HE_TRIG_CMNINFO_CSREQ_INDX		17	/* Carrier sense indication */
-#define HE_TRIG_CMNINFO_CSREQ_FSZ		1
-#define HE_TRIG_CMNINFO_BWINFO_INDX		18	/* Bw info */
-#define HE_TRIG_CMNINFO_BWINFO_FSZ		2
-#define HE_TRIG_CMNINFO_GI_LTF_INDX		20	/* Cp-LTF size */
-#define HE_TRIG_CMNINFO_GI_LTF_FSZ		2
-#define HE_TRIG_CMNINFO_MUMIMO_LTF_INDX		22	/* HE-LTF mask enable */
-#define HE_TRIG_CMNINFO_MUMIMO_LTF_FSZ		1
-#define HE_TRIG_CMNINFO_HELTF_SYM_INDX		23	/* He-LTF sumbols */
-#define HE_TRIG_CMNINFO_HELTF_SYM_FSZ		3
-#define HE_TRIG_CMNINFO_STBC_INDX		26	/* STBC support */
-#define HE_TRIG_CMNINFO_STBC_FSZ		1
-#define HE_TRIG_CMNINFO_LDPC_EXTSYM_INDX	27	/* LDPC extra symbol */
-#define HE_TRIG_CMNINFO_LDPC_EXTSYM_FSZ		1
-#define HE_TRIG_CMNINFO_AP_TXPWR_INDX		28	/* AP TX power */
-#define HE_TRIG_CMNINFO_AP_TXPWR_FSZ		6
-#define HE_TRIG_CMNINFO_AFACT_INDX		34	/* a-factor */
-#define HE_TRIG_CMNINFO_AFACT_FSZ		2
-#define HE_TRIG_CMNINFO_PEDISAMBIG_INDX		36	/* PE disambiguity */
-#define HE_TRIG_CMNINFO_PEDISAMBIG_FSZ		1
-#define HE_TRIG_CMNINFO_SPTIAL_REUSE_INDX	37	/* spatial re-use */
-#define HE_TRIG_CMNINFO_SPTIAL_REUSE_FSZ	16
-#define HE_TRIG_CMNINFO_DOPPLER_INDX		53	/* doppler supoort */
-#define HE_TRIG_CMNINFO_DOPPLER_FSZ		1
-#define HE_TRIG_CMNINFO_HESIGA_RSVD_INDX	54	/* rsvd bits from HE-SIGA */
-#define HE_TRIG_CMNINFO_HESIGA_RSVD_FSZ		9
-#define HE_TRIG_CMNINFO_RSVD_INDX		63	/* reseved bit from HE-SIGA  */
-#define HE_TRIG_CMNINFO_RSVD_FSZ		1
+#define HE_TRIG_CMNINFO_FRMTYPE_INDX		0u	/* Trigger frame type */
+#define HE_TRIG_CMNINFO_FRMTYPE_FSZ		4u
+#define HE_TRIG_CMNINFO_LSIGLEN_INDX		4u	/* L-sig length */
+#define HE_TRIG_CMNINFO_LSIGLEN_FSZ		12u
+#define HE_TRIG_CMNINFO_CASCADEIND_INDX		16u	/* Cascade indication */
+#define HE_TRIG_CMNINFO_CASCADEIND_FSZ		1u
+#define HE_TRIG_CMNINFO_CSREQ_INDX		17u	/* Carrier sense indication */
+#define HE_TRIG_CMNINFO_CSREQ_FSZ		1u
+#define HE_TRIG_CMNINFO_BWINFO_INDX		18u	/* Bw info */
+#define HE_TRIG_CMNINFO_BWINFO_FSZ		2u
+#define HE_TRIG_CMNINFO_GI_LTF_INDX		20u	/* Cp-LTF size */
+#define HE_TRIG_CMNINFO_GI_LTF_FSZ		2u
+#define HE_TRIG_CMNINFO_MUMIMO_LTF_INDX		22u	/* HE-LTF mask enable */
+#define HE_TRIG_CMNINFO_MUMIMO_LTF_FSZ		1u
+#define HE_TRIG_CMNINFO_HELTF_SYM_INDX		23u	/* He-LTF sumbols */
+#define HE_TRIG_CMNINFO_HELTF_SYM_FSZ		3u
+#define HE_TRIG_CMNINFO_STBC_INDX		26u	/* STBC support */
+#define HE_TRIG_CMNINFO_STBC_FSZ		1u
+#define HE_TRIG_CMNINFO_LDPC_EXTSYM_INDX	27u	/* LDPC extra symbol */
+#define HE_TRIG_CMNINFO_LDPC_EXTSYM_FSZ		1u
+#define HE_TRIG_CMNINFO_AP_TXPWR_INDX		28u	/* AP TX power */
+#define HE_TRIG_CMNINFO_AP_TXPWR_FSZ		6u
+#define HE_TRIG_CMNINFO_AFACT_INDX		34u	/* a-factor */
+#define HE_TRIG_CMNINFO_AFACT_FSZ		2u
+#define HE_TRIG_CMNINFO_PEDISAMBIG_INDX		36u	/* PE disambiguity */
+#define HE_TRIG_CMNINFO_PEDISAMBIG_FSZ		1u
+#define HE_TRIG_CMNINFO_SPTIAL_REUSE_INDX	37u	/* spatial re-use */
+#define HE_TRIG_CMNINFO_SPTIAL_REUSE_FSZ	16u
+#define HE_TRIG_CMNINFO_DOPPLER_INDX		53u	/* doppler supoort */
+#define HE_TRIG_CMNINFO_DOPPLER_FSZ		1u
+#define HE_TRIG_CMNINFO_HESIGA_RSVD_INDX	54u	/* rsvd bits from HE-SIGA */
+#define HE_TRIG_CMNINFO_HESIGA_RSVD_FSZ		9u
+#define HE_TRIG_CMNINFO_RSVD_INDX		63u	/* reseved bit from HE-SIGA  */
+#define HE_TRIG_CMNINFO_RSVD_FSZ		1u
 
 /* HE Basic trigger frame user info fields */
-#define HE_TRIG_USRINFO_SZ	5
+#define HE_TRIG_USRINFO_SZ	5u
 typedef uint8 he_trig_usrinfo_set_t[HE_TRIG_USRINFO_SZ];
 
 /* bit position and field width */
-#define HE_TRIG_USRINFO_AID_INDX		0	/* AID */
-#define HE_TRIG_USRINFO_AID_FSZ			12
-#define HE_TRIG_USRINFO_RU_ALLOC_INDX		12	/* RU allocation index */
-#define HE_TRIG_USRINFO_RU_ALLOC_FSZ		8
-#define HE_TRIG_USRINFO_CODING_INDX		20	/* coding type (BCC/LDPC) */
-#define HE_TRIG_USRINFO_CODING_FSZ		1
-#define HE_TRIG_USRINFO_MCS_INDX		21	/* MCS index value */
-#define HE_TRIG_USRINFO_MCS_FSZ			4
-#define HE_TRIG_USRINFO_DCM_INDX		25	/* Dual carrier modulation */
-#define HE_TRIG_USRINFO_DCM_FSZ			1
-#define HE_TRIG_USRINFO_SSALLOC_STRMOFFSET_INDX		26	/* stream offset */
-#define HE_TRIG_USRINFO_SSALLOC_STRMOFFSET_FSZ		3
-#define HE_TRIG_USRINFO_SSALLOC_NSS_INDX		29	/* number of spatial streams */
-#define HE_TRIG_USRINFO_SSALLOC_NSS_FSZ		3
-#define HE_TRIG_USRINFO_TARGET_RSSI_INDX	32	/* Target RSSI */
-#define HE_TRIG_USRINFO_TARGET_RSSI_FSZ		7
-#define HE_TRIG_USRINFO_RSVD_INDX		39	/* Reserved bit */
-#define HE_TRIG_USRINFO_RSVD_FSZ		1
+#define HE_TRIG_USRINFO_AID_INDX			0u	/* AID */
+#define HE_TRIG_USRINFO_AID_FSZ				12u
+#define HE_TRIG_USRINFO_RU_ALLOC_INDX			12u	/* RU allocation index */
+#define HE_TRIG_USRINFO_RU_ALLOC_FSZ			8u
+#define HE_TRIG_USRINFO_CODING_INDX			20u	/* coding type (BCC/LDPC) */
+#define HE_TRIG_USRINFO_CODING_FSZ			1u
+#define HE_TRIG_USRINFO_MCS_INDX			21u	/* MCS index value */
+#define HE_TRIG_USRINFO_MCS_FSZ				4u
+#define HE_TRIG_USRINFO_DCM_INDX			25u	/* Dual carrier modulation */
+#define HE_TRIG_USRINFO_DCM_FSZ				1u
+#define HE_TRIG_USRINFO_SSALLOC_STRMOFFSET_INDX		26u	/* stream offset */
+#define HE_TRIG_USRINFO_SSALLOC_STRMOFFSET_FSZ		3u
+#define HE_TRIG_USRINFO_SSALLOC_NSS_INDX		29u	/* number of spatial streams */
+#define HE_TRIG_USRINFO_SSALLOC_NSS_FSZ			3u
+#define HE_TRIG_USRINFO_TARGET_RSSI_INDX		32u	/* Target RSSI */
+#define HE_TRIG_USRINFO_TARGET_RSSI_FSZ			7u
+#define HE_TRIG_USRINFO_RSVD_INDX			39u	/* Reserved bit */
+#define HE_TRIG_USRINFO_RSVD_FSZ			1u
 
 /* Different types of trigger frame */
-#define HE_TRIG_TYPE_BASIC_FRM			0	/* basic trigger frame */
-#define HE_TRIG_TYPE_BEAM_RPT_POLL_FRM		1	/* beamforming report poll frame */
-#define HE_TRIG_TYPE_MU_BAR_FRM			2	/* MU-BAR frame */
-#define HE_TRIG_TYPE_MU_RTS__FRM		3	/* MU-RTS frame */
-#define HE_TRIG_TYPE_BSR_FRM			4	/* Buffer status report poll */
+#define HE_TRIG_TYPE_BASIC_FRM			0u	/* basic trigger frame */
+#define HE_TRIG_TYPE_BEAM_RPT_POLL_FRM		1u	/* beamforming report poll frame */
+#define HE_TRIG_TYPE_MU_BAR_FRM			2u	/* MU-BAR frame */
+#define HE_TRIG_TYPE_MU_RTS__FRM		3u	/* MU-RTS frame */
+#define HE_TRIG_TYPE_BSR_FRM			4u	/* Buffer status report poll */
 
 /* HE Timing related parameters (Table 28-9) */
-#define HE_T_LEG_STF			8
-#define HE_T_LEG_LTF			8
-#define HE_T_LEG_LSIG			4
-#define HE_T_RL_SIG			4
-#define HE_T_SIGA			8
-#define HE_T_STF			4	/* STF for SU / MU HE PPDUs */
-#define HE_T_TB_PPDU_STF		8	/* STF for HE trigger based PPDUs */
+#define HE_T_LEG_STF			8u
+#define HE_T_LEG_LTF			8u
+#define HE_T_LEG_LSIG			4u
+#define HE_T_RL_SIG			4u
+#define HE_T_SIGA			8u
+#define HE_T_STF			4u	/* STF for SU / MU HE PPDUs */
+#define HE_T_TB_PPDU_STF		8u	/* STF for HE trigger based PPDUs */
 #define HE_T_LEG_PREAMBLE		(HE_T_LEG_STF + HE_T_LEG_LTF + HE_T_LEG_LSIG)
-#define HE_T_LEG_SYMB			4
-#define HE_RU_26_TONE			26
-#define HE_RU_52_TONE			52
-#define HE_RU_106_TONE			106
-#define HE_RU_242_TONE			242
-#define HE_RU_484_TONE			484
-#define HE_RU_996_TONE			996
-#define HE_RU_2x996_TONE		1992
-#define HE_MAX_26_TONE_RU_INDX		36
-#define HE_MAX_52_TONE_RU_INDX		52
-#define HE_MAX_106_TONE_RU_INDX		60
-#define HE_MAX_242_TONE_RU_INDX		64
-#define HE_MAX_484_TONE_RU_INDX		66
-#define HE_MAX_996_TONE_RU_INDX		67
-#define HE_MAX_2x996_TONE_RU_INDX	68
+#define HE_T_LEG_SYMB			4u
+#define HE_RU_26_TONE			26u
+#define HE_RU_52_TONE			52u
+#define HE_RU_106_TONE			106u
+#define HE_RU_242_TONE			242u
+#define HE_RU_484_TONE			484u
+#define HE_RU_996_TONE			996u
+#define HE_RU_2x996_TONE		1992u
+#define HE_MAX_26_TONE_RU_INDX		36u
+#define HE_MAX_52_TONE_RU_INDX		52u
+#define HE_MAX_106_TONE_RU_INDX		60u
+#define HE_MAX_242_TONE_RU_INDX		64u
+#define HE_MAX_484_TONE_RU_INDX		66u
+#define HE_MAX_996_TONE_RU_INDX		67u
+#define HE_MAX_2x996_TONE_RU_INDX	68u
 
 /**
  * ref: (Table 28-9 Page 285)
  *
  * - for calculation purpose - in multiples of 10 (*10)
  */
-#define HE_T_LTF_1X			32
-#define HE_T_LTF_2X			64
-#define HE_T_LTF_4X			128
-#define HE_T_SYM1			136	/* OFDM symbol duration with base GI */
-#define HE_T_SYM2			144	/* OFDM symbol duration with double GI */
-#define HE_T_SYM4			160	/* OFDM symbol duration with quad GI */
+#define HE_T_LTF_1X			32u
+#define HE_T_LTF_2X			64u
+#define HE_T_LTF_4X			128u
+#define HE_T_SYM1			136u	/* OFDM symbol duration with base GI */
+#define HE_T_SYM2			144u	/* OFDM symbol duration with double GI */
+#define HE_T_SYM4			160u	/* OFDM symbol duration with quad GI */
 
-#define HE_N_LEG_SYM			3	/* bytes per legacy symbol */
-#define HE_N_TAIL			6	/* tail field bits for BCC */
-#define HE_N_SERVICE			16	/* bits in service field */
-#define HE_T_MAX_PE			16	/* max Packet extension duration */
+#define HE_N_LEG_SYM			3u	/* bytes per legacy symbol */
+#define HE_N_TAIL			6u	/* tail field bits for BCC */
+#define HE_N_SERVICE			16u	/* bits in service field */
+#define HE_T_MAX_PE			16u	/* max Packet extension duration */
 
 /* BSS Parameters subfield (Draft D8.0 Figure 9-632a) */
 #define HE_BSS_PARMS_OCT_REC_POS	0u	/* OCT Recommended */
@@ -1198,4 +1265,29 @@ typedef uint8 he_trig_usrinfo_set_t[HE_TRIG_USRINFO_SZ];
 #define HE_BSS_PARMS_CO_AP_POS		6u	/* Co-Located AP */
 #define HE_BSS_PARMS_CO_AP_SZ		1u
 
+/* Different types of BA (802.11 2024 Table 9-37) */
+#define HE_BA_TYPE_EXT_COMPRESSED       1u   /* Ext compressed BA */
+#define HE_BA_TYPE_COMPRESSED           2u   /* Compressed BA */
+#define HE_BA_TYPE_MULTI_TID            3u   /* Multi TID BA */
+#define HE_BA_TYPE_GCR                  6u   /* GCR BA */
+#define HE_BA_TYPE_GLK_GCR              10u  /* GLK-GCR BA */
+#define HE_BA_TYPE_MSTA                 11u  /* Multi-STA BA */
+
+#define HE_BA_CTRL_SZ                   2u
+#define HE_BA_CTRL_BA_TYPE_INDX         1u    /* BA Type  index */
+#define HE_BA_CTRL_BA_TYPE_FSZ          4u    /* BA Type  size  */
+
+/* MSTA BA frame payload len for single STA AID/TID info (wo bitmap) */
+#define DOT11_MSTA_BA_LEN	            6u
+
+/* BA info field for MSTA BA (802.11 2024 9.3.1.8.6) */
+#define HE_BA_INFO_SZ                                  4u
+#define HE_BA_INFO_AID_INDX                            0u   /* AID11 index */
+#define HE_BA_INFO_AID_FSZ                             11u  /* AID11 size */
+#define HE_BA_INFO_ACK_TYPE_INDX                       11u  /* ack type index */
+#define HE_BA_INFO_ACK_TYPE_FSZ                        1u   /* ack type size */
+#define HE_BA_INFO_TID_INDX                            12u  /* TID index */
+#define HE_BA_INFO_TID_FSZ                             4u   /* TID size */
+#define HE_BA_INFO_BA_STARTING_SEQ_CTRL_INDX           16u  /* BA Starting sequence control index */
+#define HE_BA_INFO_BA_STARTING_SEQ_CTRL_FSZ            16u  /* BA Starting sequence control size */
 #endif /* _802_11ax_h_ */

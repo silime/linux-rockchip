@@ -6,7 +6,26 @@
  * FTM - Fine Timing Measuremant
  * PASN - Preassociation security negotiation
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -279,7 +298,7 @@ BWL_PRE_PACKED_STRUCT struct dot11_ftm_ranging_ndpa {
 typedef struct dot11_ftm_ranging_ndpa dot11_ftm_ranging_ndpa_t;
 
 typedef struct dot11_ftm_sltf_subelmt dot11_ftm_sec_ltf_subie_params_t;
-#define DOT11_FTM_SLTF_PARAMS_SUB_IE_LEN (sizeof(dot11_ftm_sec_ltf_subie_params_t))
+#define DOT11_FTM_SLTF_PARAMS_SUB_IE_LEN sizeof(dot11_ftm_sec_ltf_subie_params_t)
 
 #define DOT11_FTM_RANGING_CMN_PARAM_SIZE DOT11_FTM_RANGING_PARAMS_FIXED_SIZE
 #define DOT11_FTM_CMN_RANGING_PARAMS_IE_LEN (sizeof(dot11_ftm_ranging_params_t) - TLV_EXT_HDR_LEN)
@@ -291,7 +310,7 @@ BWL_PRE_PACKED_STRUCT struct dot11_ftm_ntb_params {
 	uint8 info[6];
 } BWL_POST_PACKED_STRUCT;
 typedef struct dot11_ftm_ntb_params dot11_ftm_ntb_params_t;
-#define DOT11_FTM_NTB_PARAMS_SUB_IE_LEN (sizeof(dot11_ftm_ntb_params_t))
+#define DOT11_FTM_NTB_PARAMS_SUB_IE_LEN sizeof(dot11_ftm_ntb_params_t)
 #define DOT11_FTM_NTB_PARAMS_IE_LEN (DOT11_FTM_CMN_RANGING_PARAMS_IE_LEN + \
 	DOT11_FTM_NTB_PARAMS_SUB_IE_LEN)
 

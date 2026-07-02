@@ -30,6 +30,69 @@ config BCMDHD_PCIE
 
 endchoice
 
+config BCMDHD_DEBUG
+	bool "Enable bcmdhd debug support"
+	depends on BCMDHD
+	default y
+	help
+	  Enable the base DHD_DEBUG code paths in the Broadcom bcmdhd driver.
+
+config BCMDHD_DEBUG2
+	bool "Enable extended bcmdhd debug support"
+	depends on BCMDHD_DEBUG
+	default n
+	help
+	  Enable extra log dump and assertion tracing paths in bcmdhd.
+
+config BCMDHD_PLATFORM
+	bool "Enable bcmdhd platform data support"
+	depends on BCMDHD
+	default y
+	help
+	  Enable Rockchip platform GPIO/power integration for bcmdhd.
+
+config BCMDHD_DTS
+	bool "Enable bcmdhd device tree GPIO parsing"
+	depends on BCMDHD_PLATFORM
+	default y
+	help
+	  Read WL_REG_ON and WL_HOST_WAKE GPIOs from the bcmdhd device tree node.
+
+config BCMDHD_OOB_INTR
+	bool "Enable bcmdhd out-of-band interrupt"
+	depends on BCMDHD && BCMDHD_SDIO
+	default y
+	help
+	  Use WL_HOST_WAKE as the bcmdhd SDIO out-of-band interrupt.
+
+config BCMDHD_LOGDUMP
+	bool "Enable bcmdhd log dump support"
+	depends on BCMDHD
+	default y
+
+config BCMDHD_STATIC_BUF
+	bool "Enable bcmdhd static buffer support"
+	depends on BCMDHD
+	default y
+
+config BCMDHD_STATIC_BUF_IN_DHD
+	bool "Allocate bcmdhd static buffers in driver"
+	depends on BCMDHD_STATIC_BUF
+	default y
+
+config BCMDHD_HS_OFFLOAD
+	bool "Enable bcmdhd WPA/SAE/OWE handshake offload"
+	depends on BCMDHD
+	default n
+	help
+	  Enable dongle handshake offload paths in bcmdhd. Leave this off
+	  unless the cfg80211 backports required by this driver are present.
+
+config BCMDHD_HS_BKPORT
+	bool "Enable bcmdhd handshake offload backports"
+	depends on BCMDHD_HS_OFFLOAD
+	default n
+
 config PCIEASPM_ROCKCHIP_WIFI_EXTENSION
 	bool "Extend ASPM function"
 	depends on BCMDHD_PCIE && PCIEASPM_EXT

@@ -1,7 +1,26 @@
 /*
  * Fundamental types and constants relating to FILS AUTHENTICATION
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -44,7 +63,7 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_vendor_specific_element {
 	uint8		orgid_vendorspecific_content[];
 } BWL_POST_PACKED_STRUCT fils_vendor_specific_element_t;
 
-#define FILS_VS_ELEM_HDR_LEN	(sizeof(fils_vendor_specific_element_t))
+#define FILS_VS_ELEM_HDR_LEN	sizeof(fils_vendor_specific_element_t)
 
 /* 11ai D6.0 8.4.2.178 FILS Indication element */
 typedef BWL_PRE_PACKED_STRUCT struct fils_indication_element {
@@ -55,21 +74,21 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_indication_element {
 	uint8		cache_domain_publickey_id[];
 } BWL_POST_PACKED_STRUCT fils_indication_element_t;
 
-#define FILS_INDICATION_ELEM_HDR_LEN	(sizeof(fils_indication_element_t))
+#define FILS_INDICATION_ELEM_HDR_LEN	sizeof(fils_indication_element_t)
 
-#define FILS_INDICATION_IE_TAG_FIXED_LEN		2
+#define FILS_INDICATION_IE_TAG_FIXED_LEN	2
 
-#define FI_INFO_CACHE_IND_SUBFIELD_SIZE			2
+#define FI_INFO_CACHE_IND_SUBFIELD_SIZE		2
 
 /* FILS Indication Information field */
-#define FI_INFO_PUB_KEY_IDENTS_MASK		(0x0007)
-#define FI_INFO_REALM_IDENTS_MASK		(0x0038)
-#define FI_INFO_IP_ADDR_CFG_MASK		(0x0040)
-#define FI_INFO_CACHE_IDENT_MASK		(0x0080)
-#define FI_INFO_HESSID_MASK			(0x0100)
-#define FI_INFO_SHRKEY_AUTH_WOPFS_MASK		(0x0200)
-#define FI_INFO_SHRKEY_AUTH_WPFS_MASK		(0x0400)
-#define FI_INFO_PUBKEY_AUTH_MASK		(0x0800)
+#define FI_INFO_PUB_KEY_IDENTS_MASK		0x0007
+#define FI_INFO_REALM_IDENTS_MASK		0x0038
+#define FI_INFO_IP_ADDR_CFG_MASK		0x0040
+#define FI_INFO_CACHE_IDENT_MASK		0x0080
+#define FI_INFO_HESSID_MASK			0x0100
+#define FI_INFO_SHRKEY_AUTH_WOPFS_MASK		0x0200
+#define FI_INFO_SHRKEY_AUTH_WPFS_MASK		0x0400
+#define FI_INFO_PUBKEY_AUTH_MASK		0x0800
 
 #define FI_INFO_CACHE_IDENT(fc)			(((fc) & FI_INFO_CACHE_IDENT_MASK) != 0)
 #define FI_INFO_HESSID(fc)			(((fc) & FI_INFO_HESSID_MASK) != 0)
@@ -164,7 +183,7 @@ typedef BWL_PRE_PACKED_STRUCT struct tbtt_info_field {
 	uint32		short_ssid;
 	uint8		bss_params;
 } BWL_POST_PACKED_STRUCT tbtt_info_field_t;
-#define TBTT_INFO_FIELD_HDR_LEN	(sizeof(tbtt_info_field_t))
+#define TBTT_INFO_FIELD_HDR_LEN	sizeof(tbtt_info_field_t)
 
 /* 11ai D11.0 9.4.2.171.1 Neighbor AP Information field */
 typedef BWL_PRE_PACKED_STRUCT struct neighbor_ap_info_field {
@@ -175,7 +194,7 @@ typedef BWL_PRE_PACKED_STRUCT struct neighbor_ap_info_field {
 	uint8		tbtt_info_field[];
 } BWL_POST_PACKED_STRUCT neighbor_ap_info_field_t;
 
-#define NEIGHBOR_AP_INFO_FIELD_HDR_LEN	(sizeof(neighbor_ap_info_field_t))
+#define NEIGHBOR_AP_INFO_FIELD_HDR_LEN	sizeof(neighbor_ap_info_field_t)
 
 /* 11ai D11.0 9.4.2.171 Reduced Neighbor Report element */
 typedef BWL_PRE_PACKED_STRUCT struct fils_rnr_element {
@@ -185,13 +204,13 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_rnr_element {
 	uint8		neighbor_ap_info[];
 } BWL_POST_PACKED_STRUCT fils_rnr_element_t;
 
-#define FILS_RNR_ELEM_HDR_LEN	(sizeof(fils_rnr_element_t))
+#define FILS_RNR_ELEM_HDR_LEN	sizeof(fils_rnr_element_t)
 
 /* TBTT Info Header macros */
-#define TBTT_INFO_HDR_FIELD_TYPE_MASK		(0x0003u)
-#define TBTT_INFO_HDR_FN_AP_MASK		(0x0004u)
-#define TBTT_INFO_HDR_COUNT_MASK		(0x00f0u)
-#define TBTT_INFO_HDR_LENGTH_MASK		(0xff00u)
+#define TBTT_INFO_HDR_FIELD_TYPE_MASK		0x0003u
+#define TBTT_INFO_HDR_FN_AP_MASK		0x0004u
+#define TBTT_INFO_HDR_COUNT_MASK		0x00f0u
+#define TBTT_INFO_HDR_LENGTH_MASK		0xff00u
 
 #define TBTT_INFO_HDR_FIELD_TYPE(hdr)\
 	((hdr) & TBTT_INFO_HDR_FIELD_TYPE_MASK)
@@ -213,13 +232,13 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_rnr_element {
 #define TBTT_INFO_HDR_TI_LEN_SZ		8u
 
 /* BSS Params Macros */
-#define RNR_BSS_PARAMS_OCT_REC_MASK		(0x01u)
-#define RNR_BSS_PARAMS_SAME_SSID_MASK		(0x02u)
-#define RNR_BSS_PARAMS_MUTIPLE_BSSID_MASK	(0x04u)
-#define RNR_BSS_PARAMS_TRANSMITTED_BSSID_MASK	(0x08u)
-#define	RNR_BSS_MEMBER_OF_ESS_MASK		(0x10u)
-#define	RNR_BSS_20_TU_PRB_RSP_ACTIVE_MASK	(0x20u)
-#define	RNR_BSS_COLOCATED_AP_MASK		(0x40u)
+#define RNR_BSS_PARAMS_OCT_REC_MASK		0x01u
+#define RNR_BSS_PARAMS_SAME_SSID_MASK		0x02u
+#define RNR_BSS_PARAMS_MUTIPLE_BSSID_MASK	0x04u
+#define RNR_BSS_PARAMS_TRANSMITTED_BSSID_MASK	0x08u
+#define	RNR_BSS_MEMBER_OF_ESS_MASK		0x10u
+#define	RNR_BSS_20_TU_PRB_RSP_ACTIVE_MASK	0x20u
+#define	RNR_BSS_COLOCATED_AP_MASK		0x40u
 
 #define RNR_BSS_PARAMS_OCT_REC(bss)\
 	(((bss) & RNR_BSS_PARAMS_OCT_REC_MASK) != 0)
@@ -312,7 +331,7 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_session_element {
 	uint8		fils_session[FILS_SESSION_LENGTH];
 } BWL_POST_PACKED_STRUCT fils_session_element_t;
 
-#define FILS_SESSION_ELEM_LEN	(sizeof(fils_session_element_t))
+#define FILS_SESSION_ELEM_LEN	sizeof(fils_session_element_t)
 
 /* 9.4.2.179 FILS key confirmation element */
 #define FILS_KEY_CONFIRMATION_HEADER_LEN 3u
@@ -334,7 +353,7 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_key_confirm_element {
 	uint8		keyauth[];
 } BWL_POST_PACKED_STRUCT fils_key_confirm_element_t;
 
-#define FILS_CONFIRM_ELEM_HDR_LEN	(sizeof(fils_key_confirm_element_t))
+#define FILS_CONFIRM_ELEM_HDR_LEN	sizeof(fils_key_confirm_element_t)
 
 /* 9.4.2.180 FILS Public Key element */
 typedef BWL_PRE_PACKED_STRUCT struct fils_public_key_element {
@@ -355,7 +374,7 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_discovery_info_field {
 	uint8		disc_info[];
 } BWL_POST_PACKED_STRUCT fils_discovery_info_field_t;
 
-#define FD_INFO_FIELD_HDR_LEN	(sizeof(fils_discovery_info_field_t))
+#define FD_INFO_FIELD_HDR_LEN	sizeof(fils_discovery_info_field_t)
 
 #define FD_INFO_LENGTH_FIELD_SIZE             1u
 #define FD_INFO_CAP_SUBFIELD_SIZE             2u
@@ -368,16 +387,16 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_discovery_info_field {
 #define FD_INFO_MD_SUBFIELD_SIZE              3u
 
 /* FILS Discovery Information field */
-#define FD_INFO_SSID_LENGTH_MASK			(0x001f)
-#define FD_INFO_CAP_IND_MASK				(0x0020)
-#define FD_INFO_SHORT_SSID_IND_MASK			(0x0040)
-#define FD_INFO_APCSN_IND_MASK				(0x0080)
-#define FD_INFO_ANO_IND_MASK				(0x0100)
-#define FD_INFO_CH_CENTER_FR_IND_MASK			(0x0200)
-#define FD_INFO_PRIMARY_CH_IND_MASK			(0x0400)
-#define FD_INFO_RSN_IND_MASK				(0x0800)
-#define FD_INFO_LENGTH_IND_MASK				(0x1000)
-#define FD_INFO_MD_IND_MASK				(0x2000)
+#define FD_INFO_SSID_LENGTH_MASK			0x001f
+#define FD_INFO_CAP_IND_MASK				0x0020
+#define FD_INFO_SHORT_SSID_IND_MASK			0x0040
+#define FD_INFO_APCSN_IND_MASK				0x0080
+#define FD_INFO_ANO_IND_MASK				0x0100
+#define FD_INFO_CH_CENTER_FR_IND_MASK			0x0200
+#define FD_INFO_PRIMARY_CH_IND_MASK			0x0400
+#define FD_INFO_RSN_IND_MASK				0x0800
+#define FD_INFO_LENGTH_IND_MASK				0x1000
+#define FD_INFO_MD_IND_MASK				0x2000
 
 #define FD_INFO_SET_SSID_LENGTH(fc, len)	((fc) |= ((uint16)(len) & FD_INFO_SSID_LENGTH_MASK))
 #define FD_INFO_SET_CAP_PRESENT(fc)			((fc) |= FD_INFO_CAP_IND_MASK)
@@ -402,13 +421,13 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_discovery_info_field {
 #define FD_INFO_IS_MD_PRESENT(fc)			(((fc) & FD_INFO_MD_IND_MASK) != 0)
 
 /* FILS Discovery Capability subfield */
-#define FD_CAP_ESS_MASK				(0x0001)
-#define FD_CAP_PRIVACY_MASK			(0x0002)
-#define FD_CAP_BSS_CH_WIDTH_MASK		(0x001c)
-#define FD_CAP_MAX_NSS_MASK			(0x00e0)
-#define FD_CAP_MULTI_BSS_MASK			(0x0200)
-#define FD_CAP_PHY_INDEX_MASK			(0x1c00)
-#define FD_CAP_FILS_MIN_RATE_MASK		(0xe000)
+#define FD_CAP_ESS_MASK				0x0001
+#define FD_CAP_PRIVACY_MASK			0x0002
+#define FD_CAP_BSS_CH_WIDTH_MASK		0x001c
+#define FD_CAP_MAX_NSS_MASK			0x00e0
+#define FD_CAP_MULTI_BSS_MASK			0x0200
+#define FD_CAP_PHY_INDEX_MASK			0x1c00
+#define FD_CAP_FILS_MIN_RATE_MASK		0xe000
 
 #define FD_CAP_ESS(cap)				(((cap) & FD_CAP_ESS_MASK) != 0)
 #define FD_CAP_PRIVACY(cap)			(((cap) & FD_CAP_PRIVACY_MASK) != 0)
@@ -458,7 +477,7 @@ typedef BWL_PRE_PACKED_STRUCT struct fils_wrapped_data_element {
 	uint8		wrapped_data[];
 } BWL_POST_PACKED_STRUCT fils_wrapped_data_element_t;
 
-#define FILS_HLP_CONTAINER_ELEM_LEN	(sizeof(fils_hlp_container_element_t))
+#define FILS_HLP_CONTAINER_ELEM_LEN	sizeof(fils_hlp_container_element_t)
 
 /* This marks the end of a packed structure section. */
 #include <packed_section_end.h>

@@ -1,7 +1,26 @@
 /*
  * Fundamental types and constants relating to WFA MBO
  * (Multiband Operation)
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -76,7 +95,7 @@ typedef BWL_PRE_PACKED_STRUCT struct wifi_mbo_ie_s {
 	uint8 attr[BCM_FLEX_ARRAY];    /* var len attributes */
 } BWL_POST_PACKED_STRUCT wifi_mbo_ie_t;
 
-#define MBO_IE_HDR_SIZE (OFFSETOF(wifi_mbo_ie_t, attr))
+#define MBO_IE_HDR_SIZE OFFSETOF(wifi_mbo_ie_t, attr)
 /* oui:3 bytes + oui type:1 byte */
 #define MBO_IE_NO_ATTR_LEN  4
 
@@ -250,7 +269,7 @@ typedef BWL_PRE_PACKED_STRUCT struct wifi_mbo_anqp_elem_s {
 	uint8 payload[BCM_FLEX_ARRAY];
 } BWL_POST_PACKED_STRUCT wifi_mbo_anqp_elem_t;
 
-#define MBO_ANQP_ELEM_HDR_SIZE (OFFSETOF(wifi_mbo_anqp_elem_t, payload))
+#define MBO_ANQP_ELEM_HDR_SIZE OFFSETOF(wifi_mbo_anqp_elem_t, payload)
 
 /* oui:3 bytes + oui type:1 byte + sub type:1 byte */
 #define MBO_ANQP_ELEM_NO_PAYLOAD_LEN  5

@@ -9,7 +9,7 @@
 #include <wl_iapsta.h>
 #include <dhd_config.h>
 
-#define ESCAN_BUF_SIZE (64 * 1024)
+#define WL_ESCAN_BUF_SIZE (64 * 1024)
 
 #define WL_ESCAN_TIMER_INTERVAL_MS	10000 /* Scan timeout */
 
@@ -20,14 +20,26 @@ enum escan_state {
 	ESCAN_STATE_SCANING
 };
 
+typedef struct roam_cache {
+	struct roam_cache *next;
+	chanspec_t chanspec;
+	struct ether_addr bssid;
+	int dirty;
+} roam_cache_t;
+
+typedef struct roam_cache_ctrl {
+	roam_cache_t *m_cache_head;
+	wlc_ssid_t ssid;
+} roam_cache_ctrl_t;
+
 typedef struct wl_escan_info {
 	struct net_device *dev;
-	bool scan_params_v2;
+	u8 scan_params_ver;
 	dhd_pub_t *pub;
 	timer_list_compat_t scan_timeout; /* Timer for catch scan event timeout */
 	int escan_state;
 	int ioctl_ver;
-	u8 escan_buf[ESCAN_BUF_SIZE];
+	u8 escan_buf[WL_ESCAN_BUF_SIZE];
 	wl_scan_results_v109_t *bss_list;
 	u8 *escan_ioctl_buf;
 	struct mutex usr_sync; /* maily for up/down synchronization */
@@ -35,6 +47,7 @@ typedef struct wl_escan_info {
 	int best_2g_ch;
 	int best_5g_ch;
 	int best_6g_ch;
+	roam_cache_ctrl_t roam_cache_ctrl;
 #if defined(RSSIAVG)
 	wl_rssi_cache_ctrl_t g_rssi_cache_ctrl;
 	wl_rssi_cache_ctrl_t g_connected_rssi_cache_ctrl;
@@ -67,10 +80,20 @@ bool wl_escan_mesh_peer(struct net_device *dev,
 	struct wl_escan_info *escan, wlc_ssid_t *cur_ssid, uint16 cur_chan, bool sae,
 	struct wl_mesh_params *mesh_info);
 #endif /* WLMESH */
+#ifdef WL_ESCAN_ROAM_CACHE
+void wl_escan_dirty_roam_cache(struct net_device *dev, struct ether_addr *bssid, bool set);
+int wl_escan_add_roam_cache(struct net_device *dev);
+void wl_escan_init_roam_cache(struct net_device *dev, wlc_ssid_t *ssid);
+int wl_escan_roam_channel_list(struct net_device *dev, wl_scan_info_t *scan_info,
+	int n_channels);
+#endif /* WL_ESCAN_ROAM_CACHE */
 int wl_escan_drv_acs_scan(struct net_device *dev, uint32 band,
 	wl_scan_info_t *scan_info);
 int wl_escan_drv_apcs(struct net_device *dev, uint32 band, wl_scan_info_t *scan_info);
 int wl_escan_set_scan(struct net_device *dev, wl_scan_info_t *scan_info);
+int wl_escan_passive_chan_scan(struct net_device *dev);
+chanspec_t wl_escan_candidate_bss(struct net_device *net, wlc_ssid_t *ssid,
+	struct ether_addr *bssid);
 #if defined(WL_WIRELESS_EXT)
 int wl_escan_get_scan(struct net_device *dev,
 	struct iw_request_info *info, struct iw_point *dwrq, char *extra);

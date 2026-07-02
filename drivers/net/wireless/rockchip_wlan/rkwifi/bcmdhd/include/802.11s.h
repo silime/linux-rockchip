@@ -2,7 +2,26 @@
  * Fundamental types and constants relating to 802.11s -
  * "Mesh Networking"
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -24,6 +43,11 @@
 
 #ifndef _802_11s_h_
 #define _802_11s_h_
+
+/* Backwards compatibility for legacy branches. */
+#if !defined(BCM_EXTENSION)
+#define BCM_EXTENSION
+#endif
 
 /* This marks the start of a packed structure section. */
 #include <packed_section_start.h>
@@ -97,6 +121,7 @@ BWL_PRE_PACKED_STRUCT struct dot11_mesh_pathsel {
 typedef struct dot11_mesh_pathsel dot11_mesh_pathsel_t;
 
 /*  Mesh PREQ IE */
+BCM_EXTENSION	/* struct containing flexible array member is the last field. */
 BWL_PRE_PACKED_STRUCT struct mesh_preq_ie {
 	uint8   id;
 	uint8   len;
@@ -214,14 +239,14 @@ BWL_PRE_PACKED_STRUCT struct mesh_peer_mgmt_ie_common {
 	uint16	local_link_id;
 } BWL_POST_PACKED_STRUCT;
 typedef struct mesh_peer_mgmt_ie_common mesh_peer_mgmt_ie_common_t;
-#define MESH_PEER_MGMT_IE_OPEN_LEN	(4)
+#define MESH_PEER_MGMT_IE_OPEN_LEN	4
 
 BWL_PRE_PACKED_STRUCT struct mesh_peer_mgmt_ie_cfm {
 	mesh_peer_mgmt_ie_common_t	common;
 	uint16	peer_link_id;
 } BWL_POST_PACKED_STRUCT;
 typedef struct mesh_peer_mgmt_ie_cfm mesh_peer_mgmt_ie_cfm_t;
-#define MESH_PEER_MGMT_IE_CONF_LEN	(6)
+#define MESH_PEER_MGMT_IE_CONF_LEN	6
 
 BWL_PRE_PACKED_STRUCT struct mesh_peer_mgmt_ie_close {
 	mesh_peer_mgmt_ie_common_t	common;
@@ -231,7 +256,7 @@ BWL_PRE_PACKED_STRUCT struct mesh_peer_mgmt_ie_close {
 	uint16	reason_code;
 } BWL_POST_PACKED_STRUCT;
 typedef struct mesh_peer_mgmt_ie_close mesh_peer_mgmt_ie_close_t;
-#define MESH_PEER_MGMT_IE_CLOSE_LEN	(6)
+#define MESH_PEER_MGMT_IE_CLOSE_LEN	6
 
 struct mesh_config_ie {
 	uint8	activ_path_sel_prot_id;
@@ -243,7 +268,7 @@ struct mesh_config_ie {
 	uint8	mesh_cap;
 };
 typedef struct mesh_config_ie mesh_config_ie_t;
-#define MESH_CONFIG_IE_LEN	(7)
+#define MESH_CONFIG_IE_LEN		7
 
 /* Mesh peering states */
 #define MESH_PEERING_IDLE               0

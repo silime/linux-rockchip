@@ -5,7 +5,26 @@
  *
  * Definitions subject to change without notice.
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -216,7 +235,7 @@ typedef enum dhd_iface_mgmt_policy {
  * driver logic is to increase the DHD_IOCTL_MAXLEN size. This macro defines the "size"
  * of the buffer in which data is exchanged between the DHD App and DHD driver.
  */
-#define	DHD_IOCTL_MAXLEN	(16384)	/* max length ioctl buffer required */
+#define	DHD_IOCTL_MAXLEN	16384	/* max length ioctl buffer required */
 #define	DHD_IOCTL_SMLEN		256		/* "small" length ioctl buffer required */
 
 /*
@@ -224,7 +243,7 @@ typedef enum dhd_iface_mgmt_policy {
  * Ex:- DHD dump output buffer is more than 16K.
  */
 #define	DHD_IOCTL_MAXLEN_48K	(48 * 1024)
-#define	DHD_IOCTL_MAXLEN_32K	(32768u)
+#define	DHD_IOCTL_MAXLEN_32K	32768u
 #define DHD_DUMP_IOCTL_MAXLEN DHD_IOCTL_MAXLEN_48K
 
 /* common ioctl definitions */
@@ -254,7 +273,9 @@ typedef enum dhd_iface_mgmt_policy {
 #endif
 #define DHD_ARPOE_VAL	0x4000
 #define DHD_REORDER_VAL	0x8000
+#define DHD_WL_VAL		0x10000
 #define DHD_NOCHECKDIED_VAL		0x20000 /* UTF WAR */
+#define DHD_WL_VAL2		0x40000
 #define DHD_PNO_VAL		0x80000
 #define DHD_RTT_VAL		0x100000
 #define DHD_MSGTRACE_VAL	0x200000
@@ -268,11 +289,6 @@ typedef enum dhd_iface_mgmt_policy {
 #define DHD_LPBKDTDUMP_VAL	0x20000000
 #define DHD_PRSRV_MEM_VAL	0x40000000
 #define DHD_IOVAR_MEM_VAL	0x80000000
-#define DHD_ANDROID_VAL	0x10000
-#define DHD_IW_VAL	0x20000
-#define DHD_CFG_VAL	0x40000
-#define DHD_CONFIG_VAL	0x80000
-#define DHD_DUMP_VAL	0x100000
 #define DUMP_EAPOL_VAL	0x0001
 #define DUMP_ARP_VAL	0x0002
 #define DUMP_DHCP_VAL	0x0004
@@ -305,7 +321,7 @@ typedef struct dhd_pktgen {
 
 /* Type of test packets to use */
 #define DHD_PKTGEN_ECHO		1 /* Send echo requests */
-#define DHD_PKTGEN_SEND 	2 /* Send discard packets */
+#define DHD_PKTGEN_SEND		2 /* Send discard packets */
 #define DHD_PKTGEN_RXBURST	3 /* Request dongle send N packets */
 #define DHD_PKTGEN_RECV		4 /* Continuous rx from continuous tx dongle */
 #endif /* SDTEST */
@@ -322,11 +338,11 @@ typedef struct dhd_pktgen {
 #define DHD_MEMBYTES_FLAGS_SET_BAR(x, b)	((x) |= ((b) & DHD_MEMBYTES_FLAGS_BAR_MASK))
 
 /* Enter idle immediately (no timeout) */
-#define DHD_IDLE_IMMEDIATE	(-1)
+#define DHD_IDLE_IMMEDIATE	-1
 
 /* Values for idleclock iovar: other values are the sd_divisor to use when idle */
 #define DHD_IDLE_ACTIVE	0	/* Do not request any SD clock change when idle */
-#define DHD_IDLE_STOP   (-1)	/* Request SD clock be stopped (and use SD1 mode) */
+#define DHD_IDLE_STOP   -1	/* Request SD clock be stopped (and use SD1 mode) */
 
 enum dhd_maclist_xtlv_type {
 	DHD_MACLIST_XTLV_R = 0x1,
@@ -391,6 +407,14 @@ typedef struct debug_buf_dest_stat {
 	uint32 stat[DEBUG_BUF_DEST_MAX];
 } debug_buf_dest_stat_t;
 
+#ifdef DHD_FWTRACE
+/* firmware trace information */
+typedef struct dhd_fwtrace_info {
+	uint32 val;	/* value which specifies firmware trace ON/OFF */
+	uint8 filename[32]; /* 32 bytes for filename */
+} dhd_fwtrace_info_t;
+#endif /* DHD_FWTRACE */
+
 /* devreset */
 #define DHD_DEVRESET_VERSION 1
 
@@ -415,16 +439,24 @@ typedef struct dhd_tx_profile_protocol {
 	uint16	dest_port;
 } dhd_tx_profile_protocol_t;
 
-#define DHD_TX_PROFILE_DATA_LINK_LAYER	(2u)	/* data link layer protocols */
-#define DHD_TX_PROFILE_NETWORK_LAYER	(3u)	/* network layer protocols */
+#define DHD_TX_PROFILE_DATA_LINK_LAYER	2u	/* data link layer protocols */
+#define DHD_TX_PROFILE_NETWORK_LAYER	3u	/* network layer protocols */
 
-#define DHD_MAX_PROFILE_INDEX	(7u)	/* three bits are available to encode
+#define DHD_MAX_PROFILE_INDEX	7u	/* three bits are available to encode
 					   the tx profile index in the rate
 					   field in host_txbuf_post_t
 					 */
-#define DHD_MAX_PROFILES	(1u)	/* ucode only supports 1 profile atm */
+#define DHD_MAX_PROFILES	1u	/* ucode only supports 1 profile atm */
 
 #endif /* defined(DHD_TX_PROFILE) */
+
+/* Pkt LLC get return structure */
+struct dhd_pkt_llc_st {
+	unsigned int len;
+	char buf[];
+};
+
+#define DHD_MAX_PKT_LLC_PAYLOAD_LEN	32u /* Max configurable LLC header len */
 
 typedef struct dhd_loglevel_data {
 	uint32 type;

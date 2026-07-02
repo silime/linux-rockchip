@@ -1,7 +1,26 @@
 /*
  * HND generic pktq operation primitives
  *
- * Copyright (C) 2022, Broadcom.
+ * Copyright (C) 2026 Synaptics Incorporated. All rights reserved.
+ *
+ * This software is licensed to you under the terms of the
+ * GNU General Public License version 2 (the "GPL") with Broadcom special exception.
+ *
+ * INFORMATION CONTAINED IN THIS DOCUMENT IS PROVIDED "AS-IS," AND SYNAPTICS
+ * EXPRESSLY DISCLAIMS ALL EXPRESS AND IMPLIED WARRANTIES, INCLUDING ANY
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+ * AND ANY WARRANTIES OF NON-INFRINGEMENT OF ANY INTELLECTUAL PROPERTY RIGHTS.
+ * IN NO EVENT SHALL SYNAPTICS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+ * WITH THE USE OF THE INFORMATION CONTAINED IN THIS DOCUMENT, HOWEVER CAUSED
+ * AND BASED ON ANY THEORY OF LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * NEGLIGENCE OR OTHER TORTIOUS ACTION, AND EVEN IF SYNAPTICS WAS ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE. IF A TRIBUNAL OF COMPETENT JURISDICTION
+ * DOES NOT PERMIT THE DISCLAIMER OF DIRECT DAMAGES OR ANY OTHER DAMAGES,
+ * SYNAPTICS' TOTAL CUMULATIVE LIABILITY TO ANY PARTY SHALL NOT
+ * EXCEED ONE HUNDRED U.S. DOLLARS
+ *
+ * Copyright (C) 2026, Broadcom.
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -60,8 +79,8 @@ typedef struct pktq_prec {
 #ifdef PKTQ_LOG
 typedef struct {
 	uint32 requested;    /**< packets requested to be stored */
-	uint32 stored;	     /**< packets stored */
-	uint32 saved;	     /**< packets saved,
+	uint32 stored;	/**< packets stored */
+	uint32 saved;	/**< packets saved,
 	                            because a lowest priority queue has given away one packet
 	                      */
 	uint32 selfsaved;    /**< packets saved,
@@ -89,7 +108,7 @@ typedef struct {
 	uint32 rtsfail;        /**< count of rts attempts that failed to receive cts */
 	uint32 acked;          /**< count of packets sent (acked) successfully */
 	uint32 txrate_succ;    /**< running total of phy rate of packets sent successfully */
-	uint32 txrate_main;    /**< running totoal of primary phy rate of all packets */
+	uint32 txrate_main;    /**< running total of primary phy rate of all packets */
 	uint32 throughput;     /**< actual data transferred successfully */
 	uint32 airtime;        /**< cumulative total medium access delay in useconds */
 	uint32  _logtime;      /**< timestamp of last counter clear  */
@@ -114,7 +133,7 @@ struct pktq {
 	uint16 num_prec;        /**< number of precedences in use */
 	uint16 hi_prec;         /**< rapid dequeue hint (>= highest non-empty prec) */
 	uint16 max_pkts;        /**< max  packets */
-	uint16 n_pkts_tot;      /**< total (cummulative over all precedences) number of packets */
+	uint16 n_pkts_tot;      /**< total (cumulative over all precedences) number of packets */
 	/* q array must be last since # of elements can be either PKTQ_MAX_PREC or 1 */
 	struct pktq_prec q[PKTQ_MAX_PREC];
 };
@@ -208,7 +227,7 @@ extern void spktq_filter(struct spktq *spq, pktq_filter_t fltr, void* fltr_ctx,
 #define pktqprec_empty(pq, prec)		((pq)->q[prec].n_pkts == 0)
 #define pktqprec_peek(pq, prec)			((pq)->q[prec].head)
 #define pktqprec_peek_tail(pq, prec)	((pq)->q[prec].tail)
-#define spktq_peek_tail(pq)		((pq)->q.tail)
+#define spktq_peek_tail(pq)		(pq)->q.tail
 #ifdef HND_PKTQ_THREAD_SAFE
 extern int pktqprec_avail_pkts(struct pktq *pq, int prec);
 extern bool pktqprec_full(struct pktq *pq, int prec);
@@ -246,13 +265,13 @@ extern void *pktq_mpeek(struct pktq *pq, uint prec_bmp, int *prec_out);
 
 /* operations on packet queue as a whole */
 
-#define pktq_n_pkts_tot(pq)	((int)(pq)->n_pkts_tot)
-#define pktq_max(pq)		((int)(pq)->max_pkts)
+#define pktq_n_pkts_tot(pq)	(int)(pq)->n_pkts_tot
+#define pktq_max(pq)		(int)(pq)->max_pkts
 #define pktq_empty(pq)		((pq)->n_pkts_tot == 0)
-#define spktq_n_pkts(spq)	((int)(spq)->q.n_pkts)
+#define spktq_n_pkts(spq)	(int)(spq)->q.n_pkts
 #define spktq_empty(spq)	((spq)->q.n_pkts == 0)
 
-#define spktq_max(spq)		((int)(spq)->q.max_pkts)
+#define spktq_max(spq)		(int)(spq)->q.max_pkts
 #define spktq_empty(spq)	((spq)->q.n_pkts == 0)
 #ifdef HND_PKTQ_THREAD_SAFE
 extern int pktq_avail(struct pktq *pq);
